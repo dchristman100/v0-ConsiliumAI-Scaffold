@@ -1,0 +1,79 @@
+/* ═══════════════════════════════════════════════════════════════ */
+/* CONSILIUMAI — CANONICAL BRAND TOKENS v2.0                       */
+/* Brand Guide v2 · Deep Navy · Gold · DM Serif Display · DM Sans  */
+/* ═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+
+:root {
+  /* Background System */
+  --navy:   #0D1B2A;
+  --navy2:  #112236;
+  --navy3:  #162C44;
+  --navy4:  #1D3550;
+
+  /* Gold Accent — the only accent color */
+  --gold:   #C9A84C;
+  --gold-d: rgba(201, 168, 76, 0.10);
+  --gold-m: rgba(201, 168, 76, 0.25);
+
+  /* Typography */
+  --text:   #EDE9E2;
+  --muted:  #8A9AAA;
+  --dim:    #4A3E32;
+
+  /* Borders */
+  --rule:   rgba(201, 168, 76, 0.20);
+  --border: rgba(201, 168, 76, 0.15);
+
+  /* Functional Accents */
+  --red:    #E85555;
+  --green:  #2ECC8A;
+  --amber:  #F0A030;
+  --violet: #8B5CF6;
+
+  /* Font Families */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', Arial, sans-serif;
+}
+
+/* PROHIBITED: --void, --surface, --s2, --s3, --gold-l, --gold-border, --gold-soft, --teal, --blue */
+/* PROHIBITED fonts: IBM Plex Sans, IBM Plex Mono, Cormorant Garamond */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important; /* BRAND PROHIBITION — zero rounded corners anywhere */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--navy);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Eyebrow labels — global utility */
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Button base */
+.btn-gold {
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 0 !important;
+}

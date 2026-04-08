@@ -1,0 +1,23 @@
+{
+  "functions": {
+    "app/api/pdf/payer-checklist/route.ts": {
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "app/api/pdf/eu-checklist/route.ts": {
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "app/api/pdf/scorecard-result/route.ts": {
+      "memory": 1024,
+      "maxDuration": 30
+    },
+    "app/api/leads/route.ts": {
+      "memory": 256,
+      "maxDuration": 10
+    }
+  },
+  "redirects": [
+    { "source": "/www.consiliumai.co/:path*", "destination": "https://consiliumai.co/:path*", "statusCode": 301 }
+  ]
+}
