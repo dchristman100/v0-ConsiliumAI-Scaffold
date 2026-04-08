@@ -1,11 +1,11 @@
-// Sanity image URL helper
-// Phase 2: Full implementation with @sanity/image-url
+import imageUrlBuilder from '@sanity/image-url';
+import { sanityClient } from './client';
 
-import { sanityConfig } from './client';
+const builder = imageUrlBuilder(sanityClient);
 
 interface SanityImageSource {
-  _type: 'image';
-  asset: {
+  _type?: 'image';
+  asset?: {
     _ref: string;
     _type: 'reference';
   };
@@ -13,18 +13,15 @@ interface SanityImageSource {
 
 /**
  * Generate optimized image URL from Sanity image reference
- * Phase 2: Implement with @sanity/image-url
  */
-export function urlFor(source: SanityImageSource | null | undefined): string {
+export function urlFor(source: SanityImageSource | null | undefined) {
   if (!source?.asset?._ref) {
-    return '/placeholder.jpg';
+    return {
+      url: () => '/placeholder.jpg',
+      width: (w: number) => ({ url: () => '/placeholder.jpg', height: (h: number) => ({ url: () => '/placeholder.jpg' }) }),
+    };
   }
-  
-  // Phase 2: Use imageUrlBuilder
-  // return imageUrlBuilder(sanityConfig).image(source).url();
-  
-  // Placeholder return
-  return '/placeholder.jpg';
+  return builder.image(source);
 }
 
 /**
@@ -48,4 +45,17 @@ export function getImageDimensions(source: SanityImageSource): { width: number; 
   }
   
   return null;
+}
+
+/**
+ * Generate srcSet for responsive images
+ */
+export function generateSrcSet(source: SanityImageSource, widths: number[] = [320, 640, 960, 1280, 1920]): string {
+  if (!source?.asset?._ref) {
+    return '';
+  }
+  
+  return widths
+    .map((w) => `${builder.image(source).width(w).auto('format').url()} ${w}w`)
+    .join(', ');
 }

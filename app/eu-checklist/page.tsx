@@ -73,9 +73,46 @@ const EU_CHECKLIST_ITEMS = [
   'Document importer and distributor obligations where applicable',
 ];
 
+// FAQ Schema for checklist pages (Section 5 - Structured Data)
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the EU AI Act compliance deadline?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The EU AI Act high-risk deadline is August 2, 2026. Organizations deploying high-risk AI systems in the EU must be fully compliant by this date or face penalties up to €35 million or 7% of global annual turnover.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What does this EU AI Act checklist cover?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'This 38-item checklist covers risk classification, governance, technical documentation (Annex IV), conformity assessment, post-market monitoring, transparency, and supply chain requirements under the EU AI Act.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What are the penalties for EU AI Act non-compliance?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Maximum penalties under the EU AI Act are €35 million or 7% of global annual turnover for prohibited AI practices, €15 million or 3% for high-risk requirements violations, and €7.5 million or 1.5% for providing incorrect information.',
+      },
+    },
+  ],
+};
+
 export default function EUChecklistPage() {
   return (
     <>
+      {/* FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <NavUniversal />
       <CountdownBar />
       <main style={{ paddingTop: '140px' }}>

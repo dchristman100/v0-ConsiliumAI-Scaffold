@@ -1,19 +1,42 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import NavUniversal from '@/components/layout/NavUniversal';
 import Footer from '@/components/layout/Footer';
+import PostCard from '@/components/blog/PostCard';
+import SubscribeWidget from '@/components/forms/SubscribeWidget';
+import { sanityClient } from '@/lib/sanity/client';
+import { POSTS_BY_ICP_QUERY, ALL_ICP_SLUGS_QUERY } from '@/lib/sanity/queries';
+import type { Post } from '@/types/blog';
+import { MASTER_THESIS, TAGLINE } from '@/lib/constants';
+
+// ISR 60 seconds (BL-03)
+export const revalidate = 60;
 
 interface BlogICPPageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Generate static params for all ICP tags
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  const slugs = await sanityClient.fetch<string[]>(ALL_ICP_SLUGS_QUERY);
+  return slugs.map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: BlogICPPageProps): Promise<Metadata> {
   const { slug } = await params;
   
+  // Format slug for display
+  const formattedName = slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+  
   return {
-    title: `${slug} Insights — AI Governance Blog | ConsiliumAI`,
-    description: `Expert AI governance insights for ${slug} professionals. Regulatory analysis, compliance strategies, and best practices.`,
+    title: `${formattedName} Insights — AI Governance Blog | ConsiliumAI`,
+    description: `Expert AI governance insights for ${formattedName} professionals. Regulatory analysis, compliance strategies, and best practices.`,
     openGraph: {
-      title: `${slug} Insights — AI Governance Blog | ConsiliumAI`,
-      description: `Expert AI governance insights for ${slug} professionals. Regulatory analysis, compliance strategies, and best practices.`,
+      title: `${formattedName} Insights — AI Governance Blog | ConsiliumAI`,
+      description: `Expert AI governance insights for ${formattedName} professionals.`,
       type: 'website',
       url: `https://consiliumai.co/blog/icp/${slug}`,
     },
@@ -22,50 +45,188 @@ export async function generateMetadata({ params }: BlogICPPageProps): Promise<Me
 
 export default async function BlogICPPage({ params }: BlogICPPageProps) {
   const { slug } = await params;
+  
+  const posts = await sanityClient.fetch<Post[]>(POSTS_BY_ICP_QUERY, { icpSlug: slug });
+  
+  // Format slug for display
+  const formattedName = slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 
   return (
-    <main>
-      <section
-        style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '120px 24px 80px',
-          textAlign: 'center',
-        }}
-      >
-        <p className="eyebrow" style={{ color: 'var(--gold)', marginBottom: '24px' }}>
-          INSIGHTS BY AUDIENCE
-        </p>
-        <h1
+    <>
+      <NavUniversal />
+      <main style={{ paddingTop: '67px' }}>
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* HERO                                                            */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <section style={{ padding: '80px 24px 48px', textAlign: 'center' }}>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <p className="eyebrow" style={{ color: 'var(--gold)', marginBottom: '24px' }}>
+              INSIGHTS BY AUDIENCE
+            </p>
+            <h1
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(32px, 5vw, 52px)',
+                fontWeight: 400,
+                color: 'var(--text)',
+                lineHeight: 1.1,
+                marginBottom: '24px',
+              }}
+            >
+              {formattedName} Insights
+            </h1>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '18px',
+                color: 'var(--muted)',
+                lineHeight: 1.7,
+                maxWidth: '600px',
+                margin: '0 auto',
+              }}
+            >
+              Expert AI governance analysis tailored for {formattedName} professionals.
+              Regulatory compliance, risk management, and implementation strategies.
+            </p>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* BREADCRUMB                                                      */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <section style={{ padding: '0 24px 32px' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <nav style={{ fontSize: '13px', color: 'var(--muted)' }}>
+              <Link href="/blog" style={{ color: 'var(--gold)', textDecoration: 'none' }}>
+                All Insights
+              </Link>
+              <span style={{ margin: '0 8px' }}>/</span>
+              <span>{formattedName}</span>
+            </nav>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* POST GRID                                                       */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <section style={{ padding: '0 24px 64px' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            {posts.length > 0 ? (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+                  gap: '24px',
+                }}
+              >
+                {posts.map((post) => (
+                  <PostCard key={post._id} post={post} />
+                ))}
+              </div>
+            ) : (
+              <div
+                style={{
+                  padding: '64px',
+                  textAlign: 'center',
+                  background: 'var(--navy2)',
+                  border: '1px solid var(--border)',
+                }}
+              >
+                <p style={{ color: 'var(--muted)', fontSize: '16px', marginBottom: '16px' }}>
+                  No posts found for {formattedName}.
+                </p>
+                <Link
+                  href="/blog"
+                  style={{
+                    color: 'var(--gold)',
+                    fontSize: '14px',
+                    textDecoration: 'none',
+                  }}
+                >
+                  View all posts &rarr;
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* SUBSCRIBE WIDGET                                                */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <section
           style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(32px, 5vw, 56px)',
-            fontWeight: 400,
-            color: 'var(--text)',
-            lineHeight: 1.1,
-            marginBottom: '24px',
-            maxWidth: '900px',
+            padding: '64px 24px',
+            background: 'var(--navy2)',
+            borderTop: '1px solid var(--border)',
           }}
         >
-          {slug} Insights
-        </h1>
-        <p
+          <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '28px',
+                fontWeight: 400,
+                color: 'var(--text)',
+                marginBottom: '16px',
+              }}
+            >
+              Stay Informed
+            </h2>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '16px',
+                color: 'var(--muted)',
+                marginBottom: '32px',
+                lineHeight: 1.6,
+              }}
+            >
+              Get the latest AI governance insights delivered to your inbox.
+            </p>
+            <SubscribeWidget variant="inline" />
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* CLOSING QUOTE                                                   */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <section
           style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '16px',
-            color: 'var(--muted)',
-            lineHeight: 1.6,
-            maxWidth: '600px',
+            borderTop: '1px solid var(--border)',
+            padding: '80px 24px',
+            textAlign: 'center',
           }}
         >
-          Blog by ICP page — Phase 2 content will replace this placeholder.
-          Filtered post grid by ICP tag with targeted sidebar CTA.
-        </p>
-      </section>
+          <blockquote
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(24px, 3vw, 36px)',
+              fontWeight: 400,
+              fontStyle: 'italic',
+              color: 'var(--gold)',
+              lineHeight: 1.4,
+              maxWidth: '800px',
+              margin: '0 auto 24px',
+            }}
+          >
+            &ldquo;{MASTER_THESIS}&rdquo;
+          </blockquote>
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '14px',
+              color: 'var(--muted)',
+              letterSpacing: '0.02em',
+            }}
+          >
+            {TAGLINE}
+          </p>
+        </section>
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }

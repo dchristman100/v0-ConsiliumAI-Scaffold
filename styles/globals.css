@@ -76,4 +76,63 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   border-radius: 0 !important;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.btn-gold:hover {
+  opacity: 0.9;
+}
+
+.btn-gold:focus-visible {
+  outline: 2px solid var(--text) !important;
+  outline-offset: 2px !important;
+}
+
+/* Screen reader only utility (Section 5.3) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Global focus visible indicator (Section 5.3 - Accessibility) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--gold) !important;
+  outline-offset: 2px !important;
+}
+
+/* Remove outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none !important;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .btn-gold {
+    border: 2px solid currentColor;
+  }
 }

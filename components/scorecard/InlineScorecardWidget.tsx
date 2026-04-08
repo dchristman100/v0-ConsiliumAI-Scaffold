@@ -208,6 +208,10 @@ export default function InlineScorecardWidget() {
         maxWidth: '480px',
         margin: '0 auto',
       }}
+      role="region"
+      aria-label="AI Governance Scorecard"
+      aria-live="polite"
+      aria-atomic="true"
     >
       {/* Progress Bar (FW-03) */}
       {step !== 'cover' && (

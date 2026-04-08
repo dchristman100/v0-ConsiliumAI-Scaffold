@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import NavICP from '@/components/layout/NavICP';
 import Footer from '@/components/layout/Footer';
+import DedicatedPageRelatedPosts from '@/components/blog/DedicatedPageRelatedPosts';
 import { MASTER_THESIS, TAGLINE, PAYER_CHECKLIST_COUNT } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -781,6 +782,11 @@ export default function PayerCCOPage() {
             </div>
           </div>
         </section>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* RELATED BLOG POSTS (BL-07)                                       */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <DedicatedPageRelatedPosts icpSlug="payer-cco" pageType="payer" />
 
         {/* ═══════════════════════════════════════════════════════════════ */}
         {/* SECTION 10: CLOSING QUOTE + TAGLINE                             */}

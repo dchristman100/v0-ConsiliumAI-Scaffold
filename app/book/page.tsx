@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import NavUniversal from '@/components/layout/NavUniversal';
 import Footer from '@/components/layout/Footer';
+import GHLCalendarEmbed from '@/components/booking/GHLCalendarEmbed';
 import { MASTER_THESIS, TAGLINE } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -133,65 +134,8 @@ export default function BookPage() {
                 </div>
               </div>
 
-              {/* Right: Calendar Placeholder */}
-              <div
-                id="ghl-calendar-mount"
-                style={{
-                  background: 'var(--navy)',
-                  border: '1px solid var(--border)',
-                  padding: '40px',
-                  minHeight: '500px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                }}
-              >
-                <p className="eyebrow" style={{ color: 'var(--gold)', marginBottom: '16px' }}>
-                  Calendar Loading
-                </p>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '16px',
-                    color: 'var(--text)',
-                    marginBottom: '16px',
-                  }}
-                >
-                  Select a time that works for you
-                </p>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    color: 'var(--muted)',
-                    maxWidth: '300px',
-                    marginBottom: '24px',
-                  }}
-                >
-                  The GHL calendar embed will load here. Phase 3 integrates the GoHighLevel booking widget with UTM passthrough.
-                </p>
-
-                {/* Fallback CTA */}
-                <Link
-                  href="mailto:info@consiliumai.co?subject=RiskIQ Assessment Request"
-                  className="btn-gold"
-                  style={{
-                    display: 'inline-block',
-                    padding: '16px 32px',
-                    background: 'var(--gold)',
-                    color: 'var(--navy)',
-                    textDecoration: 'none',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  Email to Schedule &rarr;
-                </Link>
-              </div>
+              {/* Right: GHL Calendar Embed */}
+              <GHLCalendarEmbed />
             </div>
           </div>
         </section>

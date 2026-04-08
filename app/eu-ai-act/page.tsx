@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import NavICP from '@/components/layout/NavICP';
 import Footer from '@/components/layout/Footer';
+import DedicatedPageRelatedPosts from '@/components/blog/DedicatedPageRelatedPosts';
 import { MASTER_THESIS, TAGLINE, EU_CHECKLIST_COUNT } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -898,13 +899,18 @@ export default function EUAIActPage() {
           </div>
         </section>
 
+{/* ═══════════════════════════════════════════════════════════════ */}
+        {/* RELATED BLOG POSTS (BL-07)                                       */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <DedicatedPageRelatedPosts icpSlug="eu-ai-act" pageType="eu" />
+
         {/* ═══════════════════════════════════════════════════════════════ */}
         {/* SECTION 10: CLOSING QUOTE + TAGLINE                             */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section
-          style={{
-            borderTop: '1px solid var(--border)',
-            padding: '80px 24px',
+        style={{
+        borderTop: '1px solid var(--border)',
+        padding: '80px 24px',
             textAlign: 'center',
           }}
         >

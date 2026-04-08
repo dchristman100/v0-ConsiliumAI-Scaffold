@@ -1,9 +1,10 @@
 // components/blog/PostCard.tsx
-// Server component — blog post card
-// Phase 2: Full implementation with Sanity image
+// Server component — blog post card with Sanity image
 
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Post } from '@/types/blog';
+import { urlFor } from '@/lib/sanity/image';
 
 interface PostCardProps {
   post: Post;
@@ -24,20 +25,34 @@ export default function PostCard({ post }: PostCardProps) {
         overflow: 'hidden',
       }}
     >
-      {/* Image placeholder - Phase 2: Sanity image */}
-      <div
-        style={{
-          aspectRatio: '16/9',
-          background: 'var(--navy3)',
-        }}
-      />
+      {/* Image */}
+      <Link href={`/blog/${post.slug.current}`} style={{ display: 'block' }}>
+        <div
+          style={{
+            aspectRatio: '16/9',
+            background: 'var(--navy3)',
+            position: 'relative',
+          }}
+        >
+          {post.mainImage && (
+            <Image
+              src={urlFor(post.mainImage).width(600).height(338).url()}
+              alt={post.title}
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          )}
+        </div>
+      </Link>
       
       <div style={{ padding: '24px' }}>
         {/* Tags */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
-          {post.icpTags?.map((tag) => (
-            <span
+          {post.icpTags?.slice(0, 2).map((tag) => (
+            <Link
               key={tag._id}
+              href={`/blog?icp=${tag.slug.current}`}
               style={{
                 fontSize: '9px',
                 fontWeight: 700,
@@ -46,10 +61,29 @@ export default function PostCard({ post }: PostCardProps) {
                 color: 'var(--gold)',
                 background: 'var(--gold-d)',
                 padding: '4px 8px',
+                textDecoration: 'none',
               }}
             >
               {tag.name}
-            </span>
+            </Link>
+          ))}
+          {post.regulatoryTags?.slice(0, 1).map((tag) => (
+            <Link
+              key={tag._id}
+              href={`/blog?regulation=${tag.slug.current}`}
+              style={{
+                fontSize: '9px',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'var(--amber)',
+                background: 'rgba(240, 160, 48, 0.10)',
+                padding: '4px 8px',
+                textDecoration: 'none',
+              }}
+            >
+              {tag.name}
+            </Link>
           ))}
         </div>
 
@@ -79,6 +113,10 @@ export default function PostCard({ post }: PostCardProps) {
             color: 'var(--muted)',
             lineHeight: 1.6,
             marginBottom: '16px',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
           }}
         >
           {post.excerpt}

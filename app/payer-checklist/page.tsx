@@ -66,9 +66,46 @@ const PAYER_CHECKLIST_ITEMS = [
   'Document vendor model validation and testing requirements',
 ];
 
+// FAQ Schema for checklist pages (Section 5 - Structured Data)
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the Payer CCO AI Governance Checklist?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'A comprehensive 34-item checklist designed for health plan Chief Compliance Officers to ensure complete AI governance coverage across CMS, OCR, and state regulations.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What regulations does this checklist cover?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The checklist covers CMS Medicare Advantage requirements, OCR guidance on AI in healthcare, TRAIGA (Tennessee), Colorado AI Act, NYDFS circular letters, and False Claims Act considerations.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I download this checklist as a PDF?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, you can download a branded PDF version of this checklist for offline use and sharing with your compliance team.',
+      },
+    },
+  ],
+};
+
 export default function PayerChecklistPage() {
   return (
     <>
+      {/* FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <NavUniversal />
       <main style={{ paddingTop: '80px' }}>
         {/* Hero Section */}
