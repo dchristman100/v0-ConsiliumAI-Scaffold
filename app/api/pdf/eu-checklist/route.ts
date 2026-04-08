@@ -93,9 +93,9 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="ConsiliumAI_EU_AI_Act_Checklist.pdf"',
+        'Content-Disposition': 'attachment; filename="ConsiliumAI_EU_AI_Act_Readiness_Checklist.pdf"',
         'Content-Length': pdfBuffer.length.toString(),
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'public, max-age=3600', // 1 hour CDN cache
       },
     });
   } catch (error) {

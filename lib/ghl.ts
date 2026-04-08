@@ -233,5 +233,25 @@ export async function notifyGHLNewBlogPost(postTitle: string, postSlug: string):
   return true;
 }
 
+/**
+ * Build campaign tags based on source page and campaign (Phase 9 spec)
+ */
+export function buildCampaignTags(sourcePage: string, sourceCampaign: string): string[] {
+  const tags: string[] = [sourceCampaign];
+  switch (sourcePage) {
+    case 'homepage':
+    case 'scorecard':
+      tags.push('Universal-Scorecard');
+      break;
+    case 'payer-cco':
+      tags.push('Payer-CCO', 'ICP-08');
+      break;
+    case 'eu-ai-act':
+      tags.push('EU-AI-Act', 'ICP-03');
+      break;
+  }
+  return tags;
+}
+
 // Type exports
 export type { GHLContact, GHLCreateContactResponse, GHLContactPayload };
