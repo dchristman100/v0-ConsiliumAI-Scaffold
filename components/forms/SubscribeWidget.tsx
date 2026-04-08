@@ -4,13 +4,14 @@
 // Blog email capture widget
 // BL-09: Full implementation per spec
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormStatus } from '@/types/forms';
+import { captureUTMParams } from '@/lib/utm';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface SubscribeWidgetProps {
-  source: 'blog-inline' | 'blog-sidebar' | 'footer' | 'homepage';
+  source: 'blog-inline' | 'blog-sidebar' | 'footer';
   variant?: 'inline' | 'stacked';
 }
 
@@ -18,6 +19,11 @@ export default function SubscribeWidget({ source, variant = 'inline' }: Subscrib
   const [status, setStatus] = useState<FormStatus>('idle');
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
+
+  // Capture UTM params on mount
+  useEffect(() => {
+    captureUTMParams();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,9 +43,6 @@ export default function SubscribeWidget({ source, variant = 'inline' }: Subscrib
     setStatus('submitting');
 
     try {
-      // Stub for Phase 3 — real Supabase/GHL write in Phase 4
-      console.log('[v0] Subscribe submission:', { email, source });
-
       const response = await fetch('/api/blog-subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -47,13 +50,14 @@ export default function SubscribeWidget({ source, variant = 'inline' }: Subscrib
       });
 
       if (!response.ok) {
-        throw new Error('Subscription failed');
+        const data = await response.json();
+        throw new Error(data.error || 'Subscription failed');
       }
 
       setStatus('success');
       setEmail('');
     } catch (err) {
-      console.error('[v0] Subscription error:', err);
+      console.error('[SubscribeWidget] Subscription error:', err);
       setStatus('error');
       setError('Something went wrong. Please try again.');
     }

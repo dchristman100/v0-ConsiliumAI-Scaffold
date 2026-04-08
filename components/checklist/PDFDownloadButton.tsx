@@ -6,6 +6,13 @@
 
 import { useState } from 'react';
 
+// Analytics helper
+function trackEvent(name: string) {
+  if (typeof window !== 'undefined' && 'va' in window) {
+    (window as { va: (action: string, payload: { name: string }) => void }).va('event', { name });
+  }
+}
+
 interface PDFDownloadButtonProps {
   type: 'payer-checklist' | 'eu-checklist' | 'scorecard-result';
   sessionData?: Record<string, unknown>;
@@ -24,10 +31,13 @@ export default function PDFDownloadButton({ type, sessionData }: PDFDownloadButt
     const timeoutId = setTimeout(() => controller.abort(), 8000);
 
     try {
+      // For checklist PDFs, use GET; for scorecard result, use POST with HTML
+      const isGet = type !== 'scorecard-result';
+      
       const response = await fetch(`/api/pdf/${type}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sessionData || {}),
+        method: isGet ? 'GET' : 'POST',
+        headers: isGet ? {} : { 'Content-Type': 'application/json' },
+        body: isGet ? undefined : JSON.stringify(sessionData || {}),
         signal: controller.signal,
       });
 
@@ -37,7 +47,7 @@ export default function PDFDownloadButton({ type, sessionData }: PDFDownloadButt
         throw new Error('PDF generation failed');
       }
 
-      // Check if response is a blob (actual PDF) or JSON (stub)
+      // Check if response is a blob (actual PDF) or JSON (error)
       const contentType = response.headers.get('content-type');
       
       if (contentType?.includes('application/pdf')) {
@@ -46,14 +56,22 @@ export default function PDFDownloadButton({ type, sessionData }: PDFDownloadButt
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${type}.pdf`;
+        
+        // Get filename from Content-Disposition header or use default
+        const disposition = response.headers.get('content-disposition');
+        const filenameMatch = disposition?.match(/filename="(.+)"/);
+        a.download = filenameMatch?.[1] || `${type}.pdf`;
+        
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+
+        // Track analytics
+        trackEvent('checklist_pdf_downloaded');
       } else {
-        // Stub response - fall back to print (FC-06)
-        console.log('[v0] PDF service unavailable, falling back to print');
+        // Error response - fall back to print (FC-06)
+        console.log('[PDFDownloadButton] PDF service error, falling back to print');
         window.print();
       }
     } catch (err) {
@@ -61,12 +79,12 @@ export default function PDFDownloadButton({ type, sessionData }: PDFDownloadButt
       
       if (err instanceof Error && err.name === 'AbortError') {
         // Timeout - fall back to print (FC-06)
-        console.log('[v0] PDF service timeout, falling back to print');
+        console.log('[PDFDownloadButton] PDF service timeout, falling back to print');
         window.print();
         return;
       }
       
-      console.error('[v0] PDF download error:', err);
+      console.error('[PDFDownloadButton] PDF download error:', err);
       setError('Download failed. Using print instead.');
       // Fall back to print (FC-06)
       window.print();
@@ -80,7 +98,7 @@ export default function PDFDownloadButton({ type, sessionData }: PDFDownloadButt
       <button
         onClick={handleDownload}
         disabled={isLoading}
-        className="btn-gold"
+        className="btn-gold no-print"
         style={{
           width: '100%',
           padding: '16px 24px',

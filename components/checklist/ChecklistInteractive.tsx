@@ -4,7 +4,14 @@
 // Interactive checklist toggle + progress tracking
 // FC-01 through FC-06: Full implementation per spec
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+
+// Analytics helper
+function trackEvent(name: string) {
+  if (typeof window !== 'undefined' && 'va' in window) {
+    (window as { va: (action: string, payload: { name: string }) => void }).va('event', { name });
+  }
+}
 
 interface ChecklistInteractiveProps {
   items: string[];
@@ -23,6 +30,15 @@ function getVerdict(percentage: number): { label: string; color: string } {
 
 export default function ChecklistInteractive({ items, checklistType, totalItems }: ChecklistInteractiveProps) {
   const storageKey = `consilium-checklist-${checklistType}`;
+  const hasTracked = useRef(false);
+
+  // Track checklist opened on mount
+  useEffect(() => {
+    if (!hasTracked.current) {
+      trackEvent('checklist_opened');
+      hasTracked.current = true;
+    }
+  }, []);
   
   // Initialize from sessionStorage (FC-04)
   const [checkedItems, setCheckedItems] = useState<Set<number>>(() => {

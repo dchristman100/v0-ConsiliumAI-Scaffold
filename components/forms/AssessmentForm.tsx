@@ -4,12 +4,19 @@
 // Lead capture form with validation
 // FF-01 through FF-07: Full implementation per spec
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormStatus } from '@/types/forms';
 import type { Lead } from '@/types/leads';
-import { getUTMParams } from '@/lib/utm';
+import { getUTMParams, captureUTMParams } from '@/lib/utm';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Analytics helper
+function trackEvent(name: string) {
+  if (typeof window !== 'undefined' && 'va' in window) {
+    (window as { va: (action: string, payload: { name: string }) => void }).va('event', { name });
+  }
+}
 
 interface AssessmentFormProps {
   sourcePage: Lead['source_page'];
@@ -47,6 +54,11 @@ export default function AssessmentForm({
     primary_concern: '',
     jurisdiction: '',
   });
+
+  // Capture UTM params on mount
+  useEffect(() => {
+    captureUTMParams();
+  }, []);
 
   // Validate all required fields (FF-01)
   const validate = (): boolean => {
@@ -94,14 +106,6 @@ export default function AssessmentForm({
       // Get UTM params from sessionStorage (FF-07)
       const utmParams = getUTMParams();
 
-      // Stub for Phase 3 — real Supabase write in Phase 4
-      console.log('[v0] Assessment form submission:', {
-        ...formData,
-        source_page: sourcePage,
-        source_campaign: sourceCampaign,
-        ...utmParams,
-      });
-
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -117,9 +121,12 @@ export default function AssessmentForm({
         throw new Error('Submission failed');
       }
 
+      // Track analytics
+      trackEvent('assessment_form_submitted');
+
       setStatus('success'); // FF-04
     } catch (error) {
-      console.error('[v0] Form submission error:', error);
+      console.error('[AssessmentForm] Submission error:', error);
       setStatus('error'); // FF-05 - form preserved
     }
   };
@@ -160,7 +167,7 @@ export default function AssessmentForm({
           Submitted
         </h3>
         <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6 }}>
-          Thank you for your interest. We&apos;ll be in touch within 24 hours to schedule your RiskIQ™ Assessment.
+          Thank you for your interest. We&apos;ll be in touch within 24 hours to schedule your RiskIQ Assessment.
         </p>
       </div>
     );
@@ -317,7 +324,7 @@ export default function AssessmentForm({
             fontWeight: 600,
           }}
         >
-          {status === 'submitting' ? 'Submitting...' : 'Request RiskIQ™ Assessment'}
+          {status === 'submitting' ? 'Submitting...' : 'Request RiskIQ Assessment'}
         </button>
       </div>
     </form>

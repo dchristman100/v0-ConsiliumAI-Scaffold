@@ -3,6 +3,44 @@
 
 import type { UTMParams } from '@/types/forms';
 
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+
+/**
+ * Capture UTM params from URL and store in sessionStorage
+ * Call this on page load (client-side)
+ */
+export function captureUTMParams(): void {
+  if (typeof window === 'undefined') return;
+  
+  const params = new URLSearchParams(window.location.search);
+  
+  UTM_KEYS.forEach((key) => {
+    const value = params.get(key);
+    if (value) {
+      sessionStorage.setItem(key, value);
+    }
+  });
+}
+
+/**
+ * Get UTM params from sessionStorage
+ * For use when submitting forms
+ */
+export function getUTMParams(): UTMParams {
+  if (typeof window === 'undefined') return {};
+  
+  const params: UTMParams = {};
+  
+  UTM_KEYS.forEach((key) => {
+    const value = sessionStorage.getItem(key);
+    if (value) {
+      params[key] = value;
+    }
+  });
+  
+  return params;
+}
+
 /**
  * Parse UTM params from URL search params
  */
@@ -33,35 +71,6 @@ export function parseUTMFromCookie(cookieValue: string | undefined): UTMParams {
 }
 
 /**
- * Get UTM params client-side
- * First checks URL, then falls back to cookie
- */
-export function getUTMParams(): UTMParams {
-  if (typeof window === 'undefined') {
-    return {};
-  }
-
-  // Check URL first
-  const urlParams = parseUTMFromURL(new URLSearchParams(window.location.search));
-  
-  // If URL has UTM params, use those
-  if (Object.values(urlParams).some(Boolean)) {
-    return urlParams;
-  }
-
-  // Fall back to cookie
-  const cookies = document.cookie.split(';');
-  const utmCookie = cookies.find(c => c.trim().startsWith('utm_params='));
-  
-  if (utmCookie) {
-    const value = decodeURIComponent(utmCookie.split('=')[1]);
-    return parseUTMFromCookie(value);
-  }
-
-  return {};
-}
-
-/**
  * Build UTM query string for URL passthrough
  */
 export function buildUTMQueryString(params: UTMParams): string {
@@ -72,4 +81,15 @@ export function buildUTMQueryString(params: UTMParams): string {
   }
   
   return '?' + filtered.map(([k, v]) => `${k}=${encodeURIComponent(v!)}`).join('&');
+}
+
+/**
+ * Clear UTM params from sessionStorage
+ */
+export function clearUTMParams(): void {
+  if (typeof window === 'undefined') return;
+  
+  UTM_KEYS.forEach((key) => {
+    sessionStorage.removeItem(key);
+  });
 }

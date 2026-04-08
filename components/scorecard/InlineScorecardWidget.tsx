@@ -4,7 +4,7 @@
 // Homepage hero scorecard widget - Full implementation
 // FW-01 through FW-10: Complete step flow with state machine
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import type { ScorecardStep } from '@/types/scorecard';
 import { SCORECARD_QUESTIONS, PROGRESS_MAP, GAP_COLORS } from './ScorecardShared';
@@ -17,6 +17,7 @@ import {
   getQ5Penalty,
   analyzeGaps,
 } from '@/lib/scoring';
+import { getUTMParams, captureUTMParams } from '@/lib/utm';
 
 interface Answers {
   q1: number | null;
@@ -27,6 +28,13 @@ interface Answers {
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Analytics helper
+function trackEvent(name: string) {
+  if (typeof window !== 'undefined' && 'va' in window) {
+    (window as { va: (action: string, payload: { name: string }) => void }).va('event', { name });
+  }
+}
 
 export default function InlineScorecardWidget() {
   const [step, setStep] = useState<ScorecardStep>('cover');
@@ -39,28 +47,43 @@ export default function InlineScorecardWidget() {
   });
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sessionId] = useState(() => 
+    typeof crypto !== 'undefined' ? crypto.randomUUID() : Math.random().toString(36).slice(2)
+  );
+
+  // Capture UTM params on mount
+  useEffect(() => {
+    captureUTMParams();
+  }, []);
 
   // Calculate score and verdict
-  const score = calculateScore(
-    answers.q1 !== null ? getQ1Penalty(answers.q1) : 0,
-    answers.q2 !== null ? getQ2Penalty(answers.q2) : 0,
-    answers.q3 !== null ? getQ3Penalty(answers.q3) : 0,
-    answers.q5 !== null ? getQ5Penalty(answers.q5) : 0
-  );
+  const q1Penalty = answers.q1 !== null ? getQ1Penalty(answers.q1) : 0;
+  const q2Penalty = answers.q2 !== null ? getQ2Penalty(answers.q2) : 0;
+  const q3Penalty = answers.q3 !== null ? getQ3Penalty(answers.q3) : 0;
+  const q5Penalty = answers.q5 !== null ? getQ5Penalty(answers.q5) : 0;
+  
+  const score = calculateScore(q1Penalty, q2Penalty, q3Penalty, q5Penalty);
   const verdict = getVerdict(score);
-  const gaps = analyzeGaps(
-    answers.q1 !== null ? getQ1Penalty(answers.q1) : 0,
-    answers.q2 !== null ? getQ2Penalty(answers.q2) : 0,
-    answers.q3 !== null ? getQ3Penalty(answers.q3) : 0,
-    answers.q5 !== null ? getQ5Penalty(answers.q5) : 0
-  );
+  const gaps = analyzeGaps(q1Penalty, q2Penalty, q3Penalty, q5Penalty);
+
+  // Get Q4 selections as strings (regulatory flags)
+  const getQ4Selections = (): string[] => {
+    const options = SCORECARD_QUESTIONS.find(q => q.id === 'q4')?.options || [];
+    return answers.q4.map(idx => options[idx]);
+  };
 
   // Navigation handlers
   const goNext = useCallback(() => {
     const steps: ScorecardStep[] = ['cover', 'q1', 'q2', 'q3', 'q4', 'q5', 'results'];
     const idx = steps.indexOf(step);
     if (idx < steps.length - 1) {
-      setStep(steps[idx + 1]);
+      const nextStep = steps[idx + 1];
+      setStep(nextStep);
+      
+      // Track scorecard completed when reaching results
+      if (nextStep === 'results') {
+        trackEvent('scorecard_completed');
+      }
     }
   }, [step]);
 
@@ -97,17 +120,70 @@ export default function InlineScorecardWidget() {
     return true;
   };
 
+  // Begin scorecard handler
+  const handleBegin = () => {
+    trackEvent('scorecard_started');
+    setStep('q1');
+  };
+
   // Submit handler (FW-08, FW-09)
   const handleSubmit = async () => {
     if (!EMAIL_REGEX.test(email)) return;
     setIsSubmitting(true);
 
-    // Stub for Phase 3 — real Supabase write in Phase 4
-    console.log('[v0] Scorecard submission:', { email, score, answers });
-    await new Promise(resolve => setTimeout(resolve, 500));
+    try {
+      // Get UTM params from sessionStorage
+      const utmParams = getUTMParams();
 
-    setIsSubmitting(false);
-    setStep('submitted');
+      // Build scorecard data
+      const scorecardData = {
+        q1_answer: answers.q1 ?? 0,
+        q1_penalty: q1Penalty,
+        q2_answer: answers.q2 ?? 0,
+        q2_penalty: q2Penalty,
+        q3_answer: answers.q3 ?? 0,
+        q3_penalty: q3Penalty,
+        q4_selections: getQ4Selections(),
+        q5_answer: answers.q5 ?? 0,
+        q5_penalty: q5Penalty,
+        final_score: score,
+        score_verdict: verdict.label,
+        source: 'homepage-inline' as const,
+        session_id: sessionId,
+        regulatory_flags: getQ4Selections(),
+      };
+
+      // Submit to /api/leads with scorecard data
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name: 'Scorecard User', // Placeholder - will be updated in GHL
+          organization: 'Unknown',
+          role: 'Unknown',
+          primary_concern: 'AI governance gaps',
+          source_page: 'homepage',
+          source_campaign: 'Campaign-1',
+          scorecard: scorecardData,
+          ...utmParams,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
+
+      // Track analytics
+      trackEvent('scorecard_email_submitted');
+
+      setStep('submitted');
+    } catch (error) {
+      console.error('[Scorecard] Submission error:', error);
+      // Show error state but don't block - form preserved
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Retake handler (FW-10)
@@ -157,7 +233,7 @@ export default function InlineScorecardWidget() {
       {step === 'cover' && (
         <>
           <p className="eyebrow" style={{ color: 'var(--gold)', marginBottom: '16px' }}>
-            AI GOVERNANCE SCORECARD™
+            AI GOVERNANCE SCORECARD
           </p>
           <h3
             style={{
@@ -181,7 +257,7 @@ export default function InlineScorecardWidget() {
             Five questions. Two minutes. Instant gap analysis.
           </p>
           <button
-            onClick={() => setStep('q1')}
+            onClick={handleBegin}
             className="btn-gold"
             style={{
               width: '100%',
@@ -193,7 +269,7 @@ export default function InlineScorecardWidget() {
               fontSize: '13px',
             }}
           >
-            Begin Scorecard — 2 Minutes →
+            Begin Scorecard — 2 Minutes
           </button>
         </>
       )}
@@ -291,7 +367,7 @@ export default function InlineScorecardWidget() {
                   cursor: 'pointer',
                 }}
               >
-                ← Back
+                Back
               </button>
             )}
             <button
@@ -310,7 +386,7 @@ export default function InlineScorecardWidget() {
                 opacity: isCurrentAnswered() ? 1 : 0.5,
               }}
             >
-              {step === 'q5' ? 'See My Score →' : 'Next →'}
+              {step === 'q5' ? 'See My Score' : 'Next'}
             </button>
           </div>
         </>
@@ -441,7 +517,7 @@ export default function InlineScorecardWidget() {
                 opacity: EMAIL_REGEX.test(email) ? 1 : 0.5,
               }}
             >
-              {isSubmitting ? 'Submitting...' : 'Send My Score Report + Book RiskIQ™ Assessment →'}
+              {isSubmitting ? 'Submitting...' : 'Send My Score Report + Book RiskIQ Assessment'}
             </button>
           </div>
 
@@ -516,7 +592,7 @@ export default function InlineScorecardWidget() {
               marginBottom: '16px',
             }}
           >
-            View Full Regulatory Exposure Map →
+            View Full Regulatory Exposure Map
           </Link>
           <button
             onClick={handleRetake}
