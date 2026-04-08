@@ -5,7 +5,7 @@ import NavUniversal from '@/components/layout/NavUniversal';
 import Footer from '@/components/layout/Footer';
 import PostCard from '@/components/blog/PostCard';
 import SubscribeWidget from '@/components/forms/SubscribeWidget';
-import { sanityClient } from '@/lib/sanity/client';
+import { getSanityClient, isSanityConfigured } from '@/lib/sanity/client';
 import { ALL_POSTS_QUERY, FEATURED_POST_QUERY, ALL_TAGS_QUERY } from '@/lib/sanity/queries';
 import { urlFor } from '@/lib/sanity/image';
 import type { Post, ICPTag, RegulatoryTag } from '@/types/blog';
@@ -34,12 +34,19 @@ export default async function BlogIndexPage({ searchParams }: BlogPageProps) {
   const currentPage = parseInt(params.page || '1', 10);
   const postsPerPage = 9;
 
-  // Fetch all data in parallel
-  const [allPosts, featuredPost, tags] = await Promise.all([
-    sanityClient.fetch<Post[]>(ALL_POSTS_QUERY),
-    sanityClient.fetch<Post | null>(FEATURED_POST_QUERY),
-    sanityClient.fetch<{ icpTags: ICPTag[]; regulatoryTags: RegulatoryTag[] }>(ALL_TAGS_QUERY),
-  ]);
+  // Fetch all data in parallel (if Sanity is configured)
+  let allPosts: Post[] = [];
+  let featuredPost: Post | null = null;
+  let tags: { icpTags: ICPTag[]; regulatoryTags: RegulatoryTag[] } = { icpTags: [], regulatoryTags: [] };
+
+  const client = getSanityClient();
+  if (client && isSanityConfigured) {
+    [allPosts, featuredPost, tags] = await Promise.all([
+      client.fetch<Post[]>(ALL_POSTS_QUERY),
+      client.fetch<Post | null>(FEATURED_POST_QUERY),
+      client.fetch<{ icpTags: ICPTag[]; regulatoryTags: RegulatoryTag[] }>(ALL_TAGS_QUERY),
+    ]);
+  }
 
   // Filter posts by tags if specified
   let filteredPosts = allPosts;
@@ -378,7 +385,7 @@ export default async function BlogIndexPage({ searchParams }: BlogPageProps) {
 
         {/* ═══════════════════════════════════════════════════════════════ */}
         {/* SUBSCRIBE WIDGET (BL-09)                                        */}
-        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* ════════════════════════════��══════════════════════════════════ */}
         <section
           style={{
             padding: '64px 24px',

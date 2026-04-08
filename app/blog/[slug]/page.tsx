@@ -7,7 +7,7 @@ import NavUniversal from '@/components/layout/NavUniversal';
 import Footer from '@/components/layout/Footer';
 import SidebarCTA from '@/components/blog/SidebarCTA';
 import SubscribeWidget from '@/components/forms/SubscribeWidget';
-import { sanityClient } from '@/lib/sanity/client';
+import { getSanityClient, isSanityConfigured } from '@/lib/sanity/client';
 import {
   POST_BY_SLUG_QUERY,
   ALL_POST_SLUGS_QUERY,
@@ -27,14 +27,23 @@ interface BlogPostPageProps {
 
 // Generate static params for all published posts (BL-14)
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const slugs = await sanityClient.fetch<string[]>(ALL_POST_SLUGS_QUERY);
+  if (!isSanityConfigured) return [];
+  const client = getSanityClient();
+  if (!client) return [];
+  const slugs = await client.fetch<string[]>(ALL_POST_SLUGS_QUERY);
   return slugs.map((slug) => ({ slug }));
 }
 
 // Dynamic metadata from Sanity fields (BL-12, BL-13)
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await sanityClient.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug });
+  
+  if (!isSanityConfigured) {
+    return { title: 'Blog Post | ConsiliumAI' };
+  }
+  
+  const client = getSanityClient();
+  const post = client ? await client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug }) : null;
 
   if (!post) {
     return {
@@ -65,7 +74,13 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = await sanityClient.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug });
+  
+  const client = getSanityClient();
+  if (!client || !isSanityConfigured) {
+    notFound();
+  }
+  
+  const post = await client.fetch<Post | null>(POST_BY_SLUG_QUERY, { slug });
 
   if (!post) {
     notFound();
@@ -75,7 +90,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const icpSlugs = post.icpTags?.map((tag) => tag.slug.current) || [];
   const regulationSlugs = post.regulatoryTags?.map((tag) => tag.slug.current) || [];
 
-  const relatedPosts = await sanityClient.fetch<Post[]>(RELATED_POSTS_QUERY, {
+  const relatedPosts = await client.fetch<Post[]>(RELATED_POSTS_QUERY, {
     currentSlug: slug,
     icpSlugs,
     regulationSlugs,

@@ -4,7 +4,7 @@ import NavUniversal from '@/components/layout/NavUniversal';
 import Footer from '@/components/layout/Footer';
 import PostCard from '@/components/blog/PostCard';
 import SubscribeWidget from '@/components/forms/SubscribeWidget';
-import { sanityClient } from '@/lib/sanity/client';
+import { getSanityClient, isSanityConfigured } from '@/lib/sanity/client';
 import { POSTS_BY_ICP_QUERY, ALL_ICP_SLUGS_QUERY } from '@/lib/sanity/queries';
 import type { Post } from '@/types/blog';
 import { MASTER_THESIS, TAGLINE } from '@/lib/constants';
@@ -18,7 +18,10 @@ interface BlogICPPageProps {
 
 // Generate static params for all ICP tags
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const slugs = await sanityClient.fetch<string[]>(ALL_ICP_SLUGS_QUERY);
+  if (!isSanityConfigured) return [];
+  const client = getSanityClient();
+  if (!client) return [];
+  const slugs = await client.fetch<string[]>(ALL_ICP_SLUGS_QUERY);
   return slugs.map((slug) => ({ slug }));
 }
 
@@ -46,7 +49,11 @@ export async function generateMetadata({ params }: BlogICPPageProps): Promise<Me
 export default async function BlogICPPage({ params }: BlogICPPageProps) {
   const { slug } = await params;
   
-  const posts = await sanityClient.fetch<Post[]>(POSTS_BY_ICP_QUERY, { icpSlug: slug });
+  let posts: Post[] = [];
+  const client = getSanityClient();
+  if (client && isSanityConfigured) {
+    posts = await client.fetch<Post[]>(POSTS_BY_ICP_QUERY, { icpSlug: slug });
+  }
   
   // Format slug for display
   const formattedName = slug

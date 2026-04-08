@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { sanityClient } from '@/lib/sanity/client';
+import { getSanityClient, isSanityConfigured } from '@/lib/sanity/client';
 import { POSTS_BY_ICP_RECENT_QUERY } from '@/lib/sanity/queries';
 import { urlFor } from '@/lib/sanity/image';
 import type { Post } from '@/types/blog';
@@ -18,7 +18,17 @@ export default async function DedicatedPageRelatedPosts({
   icpSlug,
   pageType,
 }: DedicatedPageRelatedPostsProps) {
-  const posts = await sanityClient.fetch<Post[]>(POSTS_BY_ICP_RECENT_QUERY, { icpSlug });
+  // Return null if Sanity is not configured
+  if (!isSanityConfigured) {
+    return null;
+  }
+  
+  const client = getSanityClient();
+  if (!client) {
+    return null;
+  }
+  
+  const posts = await client.fetch<Post[]>(POSTS_BY_ICP_RECENT_QUERY, { icpSlug });
 
   const sectionTitle = pageType === 'payer' 
     ? 'Latest Payer Compliance Insights' 

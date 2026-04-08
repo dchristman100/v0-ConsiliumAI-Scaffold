@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { sanityClient } from '@/lib/sanity/client';
+import { getSanityClient, isSanityConfigured } from '@/lib/sanity/client';
 import { SITEMAP_POSTS_QUERY } from '@/lib/sanity/queries';
 
 interface SitemapPost {
@@ -63,19 +63,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Fetch all blog posts from Sanity
+  // Fetch all blog posts from Sanity (if configured)
   let blogPosts: MetadataRoute.Sitemap = [];
-  try {
-    const posts = await sanityClient.fetch<SitemapPost[]>(SITEMAP_POSTS_QUERY);
-    blogPosts = posts.map((post) => ({
-      url: `${baseUrl}/blog/${post.slug.current}`,
-      lastModified: new Date(post._updatedAt || post.publishedAt),
-      changeFrequency: 'weekly' as const,
-      priority: 0.6,
-    }));
-  } catch (error) {
-    // If Sanity fetch fails, continue with static pages only
-    console.error('Failed to fetch posts for sitemap:', error);
+  
+  if (isSanityConfigured) {
+    try {
+      const client = getSanityClient();
+      if (client) {
+        const posts = await client.fetch<SitemapPost[]>(SITEMAP_POSTS_QUERY);
+        blogPosts = posts.map((post) => ({
+          url: `${baseUrl}/blog/${post.slug.current}`,
+          lastModified: new Date(post._updatedAt || post.publishedAt),
+          changeFrequency: 'weekly' as const,
+          priority: 0.6,
+        }));
+      }
+    } catch (error) {
+      // If Sanity fetch fails, continue with static pages only
+      console.error('Failed to fetch posts for sitemap:', error);
+    }
   }
 
   return [...staticPages, ...blogPosts];
