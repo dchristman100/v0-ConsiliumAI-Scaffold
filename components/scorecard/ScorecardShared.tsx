@@ -1,83 +1,82 @@
 // components/scorecard/ScorecardShared.tsx
 // Shared question data for both InlineScorecardWidget and ScorecardFull
 // SSR-safe: All text content is static and indexable
+// Phase 7: Exact questions and penalty values per spec
 
-export interface ScorecardQuestionData {
-  id: 'q1' | 'q2' | 'q3' | 'q4' | 'q5';
-  text: string;
-  subtext: string;
-  options: string[];
-  multiSelect?: boolean;
-}
+import type { ScorecardQuestion } from '@/types/scorecard';
 
-// Questions with exact text per spec
-export const SCORECARD_QUESTIONS: ScorecardQuestionData[] = [
+export const SCORECARD_QUESTIONS: ScorecardQuestion[] = [
   {
-    id: 'q1',
-    text: 'Does your organization have a formal AI governance policy?',
-    subtext: 'Including board-approved guidelines for AI development and deployment',
+    id: 1,
+    text: "How mature is your organization's AI governance framework?",
     options: [
-      'Yes, comprehensive and board-approved',
-      'Yes, but informal or incomplete',
-      'In development',
-      'No formal policy',
+      { label: 'Board-approved policy with dedicated AI governance committee', value: 0, penalty: 0 },
+      { label: 'Written policies exist but no formal governance structure', value: 1, penalty: 8 },
+      { label: 'Informal guidelines only — no documented policies', value: 2, penalty: 17 },
+      { label: 'No AI governance framework in place', value: 3, penalty: 20 },
     ],
   },
   {
-    id: 'q2',
-    text: 'What level of board oversight exists for AI initiatives?',
-    subtext: 'Regular reporting and accountability structures',
+    id: 2,
+    text: 'How is AI risk currently documented in your organization?',
     options: [
-      'Dedicated AI committee with regular reporting',
-      'Periodic board updates on AI matters',
-      'Ad-hoc reporting only',
-      'No board-level oversight',
+      { label: 'Comprehensive model cards, data lineage, and risk assessments for all AI systems', value: 0, penalty: 0 },
+      { label: 'Partial documentation — some systems documented, others not', value: 1, penalty: 7 },
+      { label: 'Ad hoc documentation — no consistent standard', value: 2, penalty: 15 },
+      { label: 'No AI risk documentation exists', value: 3, penalty: 20 },
     ],
   },
   {
-    id: 'q3',
-    text: 'How comprehensive is your AI documentation and audit trail?',
-    subtext: 'Model cards, decision logs, testing records',
+    id: 3,
+    text: 'Which best describes your regulatory readiness?',
     options: [
-      'Complete documentation with audit trail',
-      'Partial documentation exists',
-      'Minimal documentation',
-      'No systematic documentation',
+      { label: 'Proactive — mapped to all applicable frameworks with compliance roadmap', value: 0, penalty: 0 },
+      { label: "Aware — know which regulations apply but haven't fully mapped compliance", value: 1, penalty: 8 },
+      { label: 'Reactive — respond to regulatory inquiries as they arise', value: 2, penalty: 16 },
+      { label: "Unaware — haven't assessed which AI regulations apply", value: 3, penalty: 20 },
     ],
   },
   {
-    id: 'q4',
-    text: 'Which regulatory frameworks apply to your AI use cases?',
-    subtext: 'Select all that apply — this informs your exposure map',
+    id: 4,
+    text: 'Which regulations apply to your organization?',
+    subtext: 'Select all that apply',
     multiSelect: true,
     options: [
-      'Healthcare / HIPAA covered',
-      'Insurance / state-regulated',
-      'EU operations / EU AI Act',
-      'Financial services / NYDFS',
-      'Medicare Advantage',
-      'None of the above',
+      { label: 'OCR Phase 3', value: 0, penalty: 0 },
+      { label: 'TRAIGA', value: 1, penalty: 0 },
+      { label: 'EU AI Act', value: 2, penalty: 0 },
+      { label: 'NYDFS 500.17', value: 3, penalty: 0 },
+      { label: 'CMS MA Star Ratings', value: 4, penalty: 0 },
+      { label: 'Colorado AI Act', value: 5, penalty: 0 },
     ],
   },
   {
-    id: 'q5',
-    text: 'Do you have an AI-specific incident response plan?',
-    subtext: 'Procedures for model failures, bias detection, regulatory inquiries',
+    id: 5,
+    text: 'How does your board currently oversee AI risk?',
     options: [
-      'Yes, tested and documented',
-      'Yes, but untested',
-      'General IR plan only (not AI-specific)',
-      'No incident response plan',
+      { label: 'Regular board reporting with AI governance metrics and KPIs', value: 0, penalty: 0 },
+      { label: 'Annual review — AI mentioned in broader technology updates', value: 1, penalty: 6 },
+      { label: 'Ad hoc — AI discussed only when incidents arise', value: 2, penalty: 14 },
+      { label: 'No board oversight of AI risk', value: 3, penalty: 20 },
     ],
   },
 ];
 
+export const REGULATORY_EXPOSURE_MAP = [
+  { id: 'ocr', label: 'OCR Phase 3', fullName: 'Office for Civil Rights — HIPAA AI Guidance', matchKey: 'OCR Phase 3' },
+  { id: 'traiga', label: 'TRAIGA', fullName: 'Tennessee Responsible AI in Government Act', matchKey: 'TRAIGA' },
+  { id: 'eu-ai-act', label: 'EU AI Act', fullName: 'European Union AI Regulation — August 2, 2026', matchKey: 'EU AI Act' },
+  { id: 'nydfs', label: 'NYDFS', fullName: 'NY Department of Financial Services 500.17', matchKey: 'NYDFS 500.17' },
+  { id: 'cms-ma', label: 'CMS MA', fullName: 'CMS Medicare Advantage Star Ratings', matchKey: 'CMS MA Star Ratings' },
+  { id: 'colorado', label: 'Colorado AI Act', fullName: 'Colorado AI Consumer Protection Act', matchKey: 'Colorado AI Act' },
+] as const;
+
 export const DIMENSION_LABELS = {
-  q1: 'AI Policy Framework',
-  q2: 'Board Oversight',
-  q3: 'Documentation & Audit Trail',
-  q4: 'Regulatory Exposure',
-  q5: 'Incident Response',
+  1: 'AI Governance Framework',
+  2: 'AI Risk Documentation',
+  3: 'Regulatory Readiness',
+  4: 'Regulatory Exposure',
+  5: 'Board Oversight',
 } as const;
 
 // Progress percentages per step (FW-03)
@@ -92,9 +91,9 @@ export const PROGRESS_MAP: Record<string, number> = {
   submitted: 100,
 };
 
-// Gap status colors
+// Gap status colors (using CSS vars preferred)
 export const GAP_COLORS = {
-  good: '#22c55e', // green-500
-  warn: '#eab308', // yellow-500 / gold
-  bad: '#ef4444', // red-500
+  good: 'var(--green)',
+  warn: 'var(--amber)',
+  bad: 'var(--red)',
 } as const;

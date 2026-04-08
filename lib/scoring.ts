@@ -1,8 +1,8 @@
-// Scorecard scoring algorithm
+// lib/scoring.ts
+// Scorecard scoring algorithm - Phase 7
 // Shared between inline widget and full page
 // SC-01, SC-02: Exact algorithm per spec
 
-import { SCORE_VERDICTS } from './constants';
 import type { GapDimension } from '@/types/scorecard';
 
 // Q1 penalties: 0, 8, 17, 20 (by answer index 0–3)
@@ -35,13 +35,13 @@ export function calculateScore(
 
 /**
  * Get verdict based on score
- * SC-02: Exact thresholds per spec
+ * SC-02: Exact thresholds per spec - FW-07 verdicts
  */
 export function getVerdict(score: number): { label: string; detail: string } {
-  if (score >= 80) return { label: 'Strong', detail: 'Strong posture. Minor gaps to close.' };
-  if (score >= 60) return { label: 'Moderate', detail: 'Moderate exposure. Action required.' };
-  if (score >= 35) return { label: 'Significant', detail: 'Significant exposure. Board attention needed.' };
-  return { label: 'Critical', detail: 'Critical exposure. Immediate action required.' };
+  if (score >= 85) return { label: 'Strong posture', detail: 'Minor gaps to address. Well-positioned for compliance.' };
+  if (score >= 65) return { label: 'Moderate exposure', detail: 'Action recommended. Several gaps need attention.' };
+  if (score >= 40) return { label: 'Significant exposure', detail: 'Board attention needed. Material compliance gaps exist.' };
+  return { label: 'Critical exposure', detail: 'Immediate action required. Significant regulatory risk.' };
 }
 
 /**
@@ -84,74 +84,72 @@ export function analyzeGaps(
 ): GapDimension[] {
   return [
     {
-      label: 'AI Policy Framework',
+      label: 'AI Inventory',
       status: q1Penalty === 0 ? 'good' : q1Penalty <= 8 ? 'warn' : 'bad',
       detail: q1Penalty === 0 
-        ? 'Policy framework in place'
+        ? 'AI governance framework in place with board oversight'
         : q1Penalty <= 8 
-          ? 'Policy gaps identified'
-          : 'Critical policy gaps',
+          ? 'Governance structure needs formalization'
+          : 'No AI governance framework exists',
     },
     {
-      label: 'Board Oversight',
+      label: 'Documentation',
       status: q2Penalty === 0 ? 'good' : q2Penalty <= 7 ? 'warn' : 'bad',
       detail: q2Penalty === 0 
-        ? 'Oversight structure established'
+        ? 'Comprehensive documentation maintained'
         : q2Penalty <= 7 
-          ? 'Oversight improvements needed'
-          : 'No formal oversight',
+          ? 'Documentation gaps exist'
+          : 'Insufficient documentation creates risk',
     },
     {
-      label: 'Documentation & Audit Trail',
+      label: 'Human Oversight',
       status: q3Penalty === 0 ? 'good' : q3Penalty <= 8 ? 'warn' : 'bad',
       detail: q3Penalty === 0 
-        ? 'Documentation complete'
+        ? 'Proactive regulatory mapping in place'
         : q3Penalty <= 8 
-          ? 'Documentation gaps'
-          : 'Insufficient documentation',
+          ? 'Compliance gaps identified'
+          : 'Reactive posture creates exposure',
     },
     {
       label: 'Incident Response',
       status: q5Penalty === 0 ? 'good' : q5Penalty <= 6 ? 'warn' : 'bad',
       detail: q5Penalty === 0 
-        ? 'Incident response ready'
+        ? 'Board oversight with regular reporting'
         : q5Penalty <= 6 
-          ? 'Response plan incomplete'
-          : 'No incident response plan',
+          ? 'Oversight improvements needed'
+          : 'No board oversight of AI risk',
     },
   ];
 }
 
 /**
  * Regulatory exposure map based on Q4 selections
- * SC-04, SC-07: Red indicators for each Q4 selection
+ * SC-04, SC-07: Maps Q4 labels to regulatory exposure IDs
  */
 export const REGULATORY_EXPOSURES = [
-  { id: 'ocr', label: 'OCR', description: 'Office for Civil Rights' },
+  { id: 'ocr', label: 'OCR Phase 3', description: 'Office for Civil Rights — HIPAA AI Guidance' },
   { id: 'traiga', label: 'TRAIGA', description: 'Tennessee Responsible AI in Government Act' },
   { id: 'eu-ai-act', label: 'EU AI Act', description: 'European Union AI Regulation' },
-  { id: 'nydfs', label: 'NYDFS', description: 'NY Department of Financial Services' },
-  { id: 'cms-ma', label: 'CMS MA', description: 'CMS Medicare Advantage' },
-  { id: 'colorado-ai', label: 'Colorado AI Act', description: 'Colorado AI Consumer Protection' },
+  { id: 'nydfs', label: 'NYDFS 500.17', description: 'NY Department of Financial Services' },
+  { id: 'cms-ma', label: 'CMS MA', description: 'CMS Medicare Advantage Star Ratings' },
+  { id: 'colorado-ai', label: 'Colorado AI Act', description: 'Colorado AI Consumer Protection Act' },
 ] as const;
 
+/**
+ * Map Q4 selection labels to regulatory exposure IDs
+ * SC-04: Direct mapping from Q4 selections to regulatory flags
+ */
 export function mapQ4SelectionsToExposures(selections: number[]): string[] {
   // Map Q4 answer indices to regulatory exposure IDs
-  const exposureMap: Record<number, string[]> = {
-    0: ['ocr', 'cms-ma'], // No AI-specific vendor assessment
-    1: ['ocr', 'traiga', 'colorado-ai'], // Missing bias testing
-    2: ['eu-ai-act', 'nydfs'], // No model explainability
-    3: ['nydfs', 'cms-ma'], // Unclear liability
-    4: ['eu-ai-act', 'traiga'], // No audit rights
+  // Q4 options: OCR Phase 3 (0), TRAIGA (1), EU AI Act (2), NYDFS 500.17 (3), CMS MA Star Ratings (4), Colorado AI Act (5)
+  const exposureMap: Record<number, string> = {
+    0: 'ocr',
+    1: 'traiga',
+    2: 'eu-ai-act',
+    3: 'nydfs',
+    4: 'cms-ma',
+    5: 'colorado-ai',
   };
 
-  const exposedIds = new Set<string>();
-  selections.forEach(sel => {
-    const exposures = exposureMap[sel];
-    if (exposures) {
-      exposures.forEach(e => exposedIds.add(e));
-    }
-  });
-
-  return Array.from(exposedIds);
+  return selections.map(sel => exposureMap[sel]).filter(Boolean);
 }
