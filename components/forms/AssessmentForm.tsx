@@ -3,10 +3,10 @@
 // components/forms/AssessmentForm.tsx
 // Lead capture form with validation
 // FF-01 through FF-07: Full implementation per spec
+// D-01, D-02, D-03: Assessment intake forms for homepage, payer, and EU pages
 
 import { useState, useEffect } from 'react';
 import type { FormStatus } from '@/types/forms';
-import type { Lead } from '@/types/leads';
 import { getUTMParams, captureUTMParams } from '@/lib/utm';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -19,30 +19,36 @@ function trackEvent(name: string) {
 }
 
 interface AssessmentFormProps {
-  sourcePage: Lead['source_page'];
-  sourceCampaign: Lead['source_campaign'];
-  roleOptions?: readonly string[];
-  concernOptions?: readonly string[];
+  formId: string;
+  leadSource: string;
+  submitLabel?: string;
+  roleOptions?: string[];
+  concernOptions?: string[];
   showJurisdiction?: boolean;
-  jurisdictionOptions?: readonly string[];
+  jurisdictionOptions?: string[];
+  showOrgSize?: boolean;
+  orgSizeLabel?: string;
 }
 
 const DEFAULT_ROLES = [
   'CCO', 'CMO', 'CRO', 'CFO', 'General Counsel', 'CIO', 'VP Compliance', 'Other',
-] as const;
+];
 
 const DEFAULT_CONCERNS = [
   'AI governance gaps', 'Regulatory compliance', 'Board reporting', 'Vendor risk',
   'D&O liability', 'Audit readiness', 'Bias testing', 'Other',
-] as const;
+];
 
 export default function AssessmentForm({
-  sourcePage,
-  sourceCampaign,
+  formId,
+  leadSource,
+  submitLabel = 'Start Assessment',
   roleOptions = DEFAULT_ROLES,
   concernOptions = DEFAULT_CONCERNS,
   showJurisdiction = false,
   jurisdictionOptions = [],
+  showOrgSize = false,
+  orgSizeLabel = 'Organization size',
 }: AssessmentFormProps) {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -53,6 +59,7 @@ export default function AssessmentForm({
     role: '',
     primary_concern: '',
     jurisdiction: '',
+    org_size: '',
   });
 
   // Capture UTM params on mount
@@ -111,8 +118,8 @@ export default function AssessmentForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          source_page: sourcePage,
-          source_campaign: sourceCampaign,
+          lead_source: leadSource,
+          form_id: formId,
           ...utmParams,
         }),
       });
@@ -135,10 +142,11 @@ export default function AssessmentForm({
   if (status === 'success') {
     return (
       <div
+        id={formId}
         style={{
           padding: '40px 32px',
-          background: 'var(--gold-d)',
-          border: '1px solid var(--gold-m)',
+          background: 'var(--navy2)',
+          border: '1px solid var(--border)',
           textAlign: 'center',
         }}
       >
@@ -146,7 +154,6 @@ export default function AssessmentForm({
           style={{
             width: '48px',
             height: '48px',
-            borderRadius: '50%',
             background: 'var(--gold)',
             display: 'flex',
             alignItems: 'center',
@@ -154,7 +161,7 @@ export default function AssessmentForm({
             margin: '0 auto 16px',
           }}
         >
-          <span style={{ color: 'var(--navy)', fontSize: '24px' }}>✓</span>
+          <span style={{ color: 'var(--navy)', fontSize: '24px' }}>&#10003;</span>
         </div>
         <h3
           style={{
@@ -164,20 +171,29 @@ export default function AssessmentForm({
             marginBottom: '8px',
           }}
         >
-          Submitted
+          Submitted &#10003;
         </h3>
         <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6 }}>
-          Thank you for your interest. We&apos;ll be in touch within 24 hours to schedule your RiskIQ Assessment.
+          Thank you. Your assessment request has been received. A ConsiliumAI specialist will respond within 1 business day.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      id={formId}
+      onSubmit={handleSubmit}
+      style={{
+        background: 'var(--navy2)',
+        border: '1px solid var(--border)',
+        padding: '40px 32px',
+      }}
+    >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        {/* Name */}
+        {/* Full Name */}
         <div>
+          <label style={labelStyle}>Full Name *</label>
           <input
             type="text"
             value={formData.name}
@@ -185,17 +201,18 @@ export default function AssessmentForm({
               setFormData({ ...formData, name: e.target.value });
               if (errors.name) setErrors({ ...errors, name: '' });
             }}
-            placeholder="Full Name *"
+            placeholder="Enter your full name"
             style={{
               ...inputStyle,
-              borderColor: errors.name ? '#ef4444' : 'var(--border)',
+              borderColor: errors.name ? 'var(--red)' : 'var(--border)',
             }}
           />
           {errors.name && <ErrorText>{errors.name}</ErrorText>}
         </div>
 
-        {/* Email */}
+        {/* Work Email */}
         <div>
+          <label style={labelStyle}>Work Email *</label>
           <input
             type="email"
             value={formData.email}
@@ -203,10 +220,10 @@ export default function AssessmentForm({
               setFormData({ ...formData, email: e.target.value });
               if (errors.email) setErrors({ ...errors, email: '' });
             }}
-            placeholder="Work Email *"
+            placeholder="you@company.com"
             style={{
               ...inputStyle,
-              borderColor: errors.email ? '#ef4444' : 'var(--border)',
+              borderColor: errors.email ? 'var(--red)' : 'var(--border)',
             }}
           />
           {errors.email && <ErrorText>{errors.email}</ErrorText>}
@@ -214,6 +231,7 @@ export default function AssessmentForm({
 
         {/* Organization */}
         <div>
+          <label style={labelStyle}>Organization *</label>
           <input
             type="text"
             value={formData.organization}
@@ -221,17 +239,44 @@ export default function AssessmentForm({
               setFormData({ ...formData, organization: e.target.value });
               if (errors.organization) setErrors({ ...errors, organization: '' });
             }}
-            placeholder="Organization *"
+            placeholder="Company name"
             style={{
               ...inputStyle,
-              borderColor: errors.organization ? '#ef4444' : 'var(--border)',
+              borderColor: errors.organization ? 'var(--red)' : 'var(--border)',
             }}
           />
           {errors.organization && <ErrorText>{errors.organization}</ErrorText>}
         </div>
 
+        {/* Jurisdiction (optional - for EU page) */}
+        {showJurisdiction && jurisdictionOptions.length > 0 && (
+          <div>
+            <label style={labelStyle}>Jurisdiction *</label>
+            <select
+              value={formData.jurisdiction}
+              onChange={(e) => {
+                setFormData({ ...formData, jurisdiction: e.target.value });
+                if (errors.jurisdiction) setErrors({ ...errors, jurisdiction: '' });
+              }}
+              style={{
+                ...inputStyle,
+                borderColor: errors.jurisdiction ? 'var(--red)' : 'var(--border)',
+              }}
+            >
+              <option value="">Select your jurisdiction</option>
+              {jurisdictionOptions.map((j) => (
+                <option key={j} value={j}>
+                  {j}
+                </option>
+              ))}
+            </select>
+            {errors.jurisdiction && <ErrorText>{errors.jurisdiction}</ErrorText>}
+          </div>
+        )}
+
         {/* Role */}
         <div>
+          <label style={labelStyle}>Role *</label>
           <select
             value={formData.role}
             onChange={(e) => {
@@ -240,10 +285,10 @@ export default function AssessmentForm({
             }}
             style={{
               ...inputStyle,
-              borderColor: errors.role ? '#ef4444' : 'var(--border)',
+              borderColor: errors.role ? 'var(--red)' : 'var(--border)',
             }}
           >
-            <option value="">Select Your Role *</option>
+            <option value="">Select your role</option>
             {roleOptions.map((role) => (
               <option key={role} value={role}>
                 {role}
@@ -255,6 +300,7 @@ export default function AssessmentForm({
 
         {/* Primary Concern */}
         <div>
+          <label style={labelStyle}>Primary Concern *</label>
           <select
             value={formData.primary_concern}
             onChange={(e) => {
@@ -263,10 +309,10 @@ export default function AssessmentForm({
             }}
             style={{
               ...inputStyle,
-              borderColor: errors.primary_concern ? '#ef4444' : 'var(--border)',
+              borderColor: errors.primary_concern ? 'var(--red)' : 'var(--border)',
             }}
           >
-            <option value="">Primary Concern *</option>
+            <option value="">Select your primary concern</option>
             {concernOptions.map((concern) => (
               <option key={concern} value={concern}>
                 {concern}
@@ -276,34 +322,31 @@ export default function AssessmentForm({
           {errors.primary_concern && <ErrorText>{errors.primary_concern}</ErrorText>}
         </div>
 
-        {/* Jurisdiction (optional) */}
-        {showJurisdiction && jurisdictionOptions.length > 0 && (
+        {/* Organization Size (optional - for Payer page) */}
+        {showOrgSize && (
           <div>
-            <select
-              value={formData.jurisdiction}
-              onChange={(e) => {
-                setFormData({ ...formData, jurisdiction: e.target.value });
-                if (errors.jurisdiction) setErrors({ ...errors, jurisdiction: '' });
-              }}
-              style={{
-                ...inputStyle,
-                borderColor: errors.jurisdiction ? '#ef4444' : 'var(--border)',
-              }}
-            >
-              <option value="">Select Jurisdiction *</option>
-              {jurisdictionOptions.map((j) => (
-                <option key={j} value={j}>
-                  {j}
-                </option>
-              ))}
-            </select>
-            {errors.jurisdiction && <ErrorText>{errors.jurisdiction}</ErrorText>}
+            <label style={labelStyle}>{orgSizeLabel}</label>
+            <input
+              type="text"
+              value={formData.org_size}
+              onChange={(e) => setFormData({ ...formData, org_size: e.target.value })}
+              placeholder="Optional"
+              style={inputStyle}
+            />
           </div>
         )}
 
         {/* Error message (FF-05) */}
         {status === 'error' && (
-          <p style={{ color: '#ef4444', fontSize: '13px', padding: '12px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+          <p
+            style={{
+              color: 'var(--red)',
+              fontSize: '13px',
+              padding: '12px',
+              background: 'rgba(232, 85, 85, 0.1)',
+              border: '1px solid rgba(232, 85, 85, 0.2)',
+            }}
+          >
             Something went wrong. Please try again.
           </p>
         )}
@@ -320,21 +363,34 @@ export default function AssessmentForm({
             border: 'none',
             cursor: status === 'submitting' ? 'not-allowed' : 'pointer',
             fontFamily: 'var(--font-body)',
-            fontSize: '14px',
-            fontWeight: 600,
+            fontSize: '12px',
+            fontWeight: 700,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
           }}
         >
-          {status === 'submitting' ? 'Submitting...' : 'Request RiskIQ Assessment'}
+          {status === 'submitting' ? 'SUBMITTING...' : `${submitLabel} \u2192`}
         </button>
       </div>
     </form>
   );
 }
 
+const labelStyle: React.CSSProperties = {
+  display: 'block',
+  fontFamily: 'var(--font-body)',
+  fontSize: '12px',
+  fontWeight: 700,
+  letterSpacing: '0.06em',
+  textTransform: 'uppercase',
+  color: 'var(--muted)',
+  marginBottom: '8px',
+};
+
 const inputStyle: React.CSSProperties = {
   width: '100%',
   padding: '14px 16px',
-  background: 'var(--navy2)',
+  background: 'var(--navy)',
   border: '1px solid var(--border)',
   color: 'var(--text)',
   fontFamily: 'var(--font-body)',
@@ -343,7 +399,7 @@ const inputStyle: React.CSSProperties = {
 
 function ErrorText({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>
+    <p style={{ color: 'var(--red)', fontSize: '12px', marginTop: '4px' }}>
       {children}
     </p>
   );

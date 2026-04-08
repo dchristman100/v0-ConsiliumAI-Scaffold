@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import NavUniversal from '@/components/layout/NavUniversal';
 import Footer from '@/components/layout/Footer';
+import InlineScorecardWidget from '@/components/scorecard/InlineScorecardWidget';
+import AssessmentForm from '@/components/forms/AssessmentForm';
 import { MASTER_THESIS, TAGLINE } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -89,62 +91,14 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Column - 40% - Scorecard Widget Mount */}
+            {/* Right Column - 40% - Inline Scorecard Widget (D-04) */}
             <div
               id="scorecard-widget-mount"
               style={{
                 minHeight: '480px',
-                background: 'var(--navy2)',
-                border: '1px solid var(--border)',
-                padding: '40px 32px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
               }}
             >
-              <p className="eyebrow" style={{ color: 'var(--gold)', marginBottom: '16px' }}>
-                Free Assessment
-              </p>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '28px',
-                  fontWeight: 400,
-                  color: 'var(--text)',
-                  marginBottom: '16px',
-                }}
-              >
-                AI Governance Scorecard&trade;
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '15px',
-                  color: 'var(--muted)',
-                  lineHeight: 1.6,
-                  marginBottom: '32px',
-                }}
-              >
-                5 questions. 4 governance dimensions. Instant regulatory exposure map across OCR, TRAIGA, EU AI Act, NYDFS, CMS MA, and Colorado AI Act.
-              </p>
-              <Link
-                href="#scorecard"
-                className="btn-gold"
-                style={{
-                  display: 'inline-block',
-                  padding: '16px 32px',
-                  background: 'var(--gold)',
-                  color: 'var(--navy)',
-                  textDecoration: 'none',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  textAlign: 'center',
-                }}
-              >
-                Begin Scorecard &mdash; 2 Minutes &rarr;
-              </Link>
+              <InlineScorecardWidget />
             </div>
           </div>
         </section>
@@ -561,91 +515,14 @@ export default function HomePage() {
               Answer 5 questions. Get your governance score across 4 dimensions. See your regulatory exposure map for OCR, TRAIGA, EU AI Act, NYDFS, CMS MA, and Colorado AI Act.
             </p>
 
-            {/* Scorecard Form Shell - Phase 3 adds interactivity */}
-            <div
-              id="scorecard-form-mount"
-              style={{
-                background: 'var(--navy2)',
-                border: '1px solid var(--border)',
-                padding: '48px 32px',
-                textAlign: 'left',
-              }}
-            >
-              <div style={{ marginBottom: '32px' }}>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    fontSize: '11px',
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    color: 'var(--muted)',
-                    marginBottom: '16px',
-                  }}
-                >
-                  4 Governance Dimensions
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                  <DimensionTag label="AI Inventory" />
-                  <DimensionTag label="Documentation" />
-                  <DimensionTag label="Human Oversight" />
-                  <DimensionTag label="Incident Response" />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: '32px' }}>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontWeight: 700,
-                    fontSize: '11px',
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    color: 'var(--muted)',
-                    marginBottom: '16px',
-                  }}
-                >
-                  Regulatory Exposure Map
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                  <RegTag label="OCR" />
-                  <RegTag label="TRAIGA" />
-                  <RegTag label="EU AI Act" />
-                  <RegTag label="NYDFS" />
-                  <RegTag label="CMS MA" />
-                  <RegTag label="Colorado AI Act" />
-                </div>
-              </div>
-
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '15px',
-                  color: 'var(--muted)',
-                  marginBottom: '24px',
-                }}
-              >
-                The interactive scorecard will load here. Phase 3 hydrates this section with the full 5-question assessment flow.
-              </p>
-
-              <Link
-                href="/scorecard"
-                className="btn-gold"
-                style={{
-                  display: 'inline-block',
-                  padding: '16px 32px',
-                  background: 'var(--gold)',
-                  color: 'var(--navy)',
-                  textDecoration: 'none',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Start Assessment &rarr;
-              </Link>
-            </div>
+            {/* Assessment Form (D-01: replaced placeholder text) */}
+            <AssessmentForm
+              formId="homepage-assessment"
+              leadSource="Homepage Scorecard Section"
+              submitLabel="Start Assessment"
+              roleOptions={['CCO', 'CIO', 'CAIO', 'CDO', 'General Counsel', 'VP Compliance', 'CFO', 'Board Member', 'Other']}
+              concernOptions={['Regulatory compliance', 'AI risk documentation', 'Board reporting', 'Litigation readiness', 'Vendor AI governance', 'EU AI Act', 'Bias/fairness testing', 'Other']}
+            />
           </div>
         </section>
 

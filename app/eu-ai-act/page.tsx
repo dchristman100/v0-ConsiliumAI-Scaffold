@@ -3,6 +3,7 @@ import Link from 'next/link';
 import NavICP from '@/components/layout/NavICP';
 import Footer from '@/components/layout/Footer';
 import DedicatedPageRelatedPosts from '@/components/blog/DedicatedPageRelatedPosts';
+import AssessmentForm from '@/components/forms/AssessmentForm';
 import { MASTER_THESIS, TAGLINE, EU_CHECKLIST_COUNT } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -733,55 +734,16 @@ export default function EUAIActPage() {
               Complete this form to schedule your complimentary EU AI Act compliance assessment. We&apos;ll analyze your AI systems against Annex IV requirements and provide a preliminary risk classification.
             </p>
 
-            {/* Form Shell - Phase 3 adds interactivity */}
-            <div
-              id="eu-assessment-form"
-              style={{
-                background: 'var(--navy)',
-                border: '1px solid var(--border)',
-                padding: '40px 32px',
-              }}
-            >
-              <div style={{ marginBottom: '24px' }}>
-                <label style={labelStyle}>Jurisdiction</label>
-                <p style={placeholderStyle}>EU member state, US with EU operations, United Kingdom, US no EU operations, Asia-Pacific with EU ops, Other</p>
-              </div>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={labelStyle}>Your Role</label>
-                <p style={placeholderStyle}>CAIO, CDO, General Counsel, CTO, VP Compliance, DPO</p>
-              </div>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={labelStyle}>Primary Concern</label>
-                <p style={placeholderStyle}>High-risk classification, Annex IV documentation, Conformity assessment, GPAI obligations, Risk management</p>
-              </div>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  color: 'var(--muted)',
-                  marginBottom: '24px',
-                }}
-              >
-                The interactive assessment form will load here. Phase 3 hydrates this section with the full intake flow including jurisdiction dropdown.
-              </p>
-              <Link
-                href="/book"
-                className="btn-gold"
-                style={{
-                  display: 'inline-block',
-                  padding: '16px 32px',
-                  background: 'var(--gold)',
-                  color: 'var(--navy)',
-                  textDecoration: 'none',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Book Assessment Call &rarr;
-              </Link>
-            </div>
+            {/* Assessment Form (D-03: replaced placeholder text) */}
+            <AssessmentForm
+              formId="eu-assessment"
+              leadSource="EU AI Act Page"
+              submitLabel="Request EU Assessment"
+              roleOptions={['CAIO', 'CDO', 'General Counsel', 'CTO', 'VP Compliance', 'DPO', 'Other']}
+              concernOptions={['High-risk classification', 'Annex IV documentation', 'Conformity assessment', 'GPAI obligations', 'Risk management', 'Extraterritorial scope', 'Other']}
+              showJurisdiction={true}
+              jurisdictionOptions={['EU member state', 'US with EU operations', 'United Kingdom', 'US no EU operations', 'Asia-Pacific with EU ops', 'Other']}
+            />
           </div>
         </section>
 

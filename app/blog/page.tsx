@@ -318,27 +318,34 @@ export default async function BlogIndexPage({ searchParams }: BlogPageProps) {
             ) : (
               <div
                 style={{
-                  padding: '64px',
+                  padding: '64px 32px',
                   textAlign: 'center',
                   background: 'var(--navy2)',
                   border: '1px solid var(--border)',
                 }}
               >
-                <p style={{ color: 'var(--muted)', fontSize: '16px' }}>
-                  No posts found for the selected filter.
-                </p>
-                <Link
-                  href="/blog"
+                <h3
                   style={{
-                    display: 'inline-block',
-                    marginTop: '16px',
-                    color: 'var(--gold)',
-                    fontSize: '14px',
-                    textDecoration: 'none',
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '28px',
+                    fontWeight: 400,
+                    color: 'var(--text)',
+                    marginBottom: '16px',
                   }}
                 >
-                  View all posts &rarr;
-                </Link>
+                  Insights coming soon.
+                </h3>
+                <p
+                  style={{
+                    color: 'var(--muted)',
+                    fontSize: '16px',
+                    lineHeight: 1.7,
+                    maxWidth: '520px',
+                    margin: '0 auto',
+                  }}
+                >
+                  We&apos;re preparing expert analysis on AI governance, regulatory compliance, and building frameworks that are certifiable, insurable, and defendable. Subscribe below to be notified when our first posts go live.
+                </p>
               </div>
             )}
 

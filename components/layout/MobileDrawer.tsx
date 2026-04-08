@@ -100,10 +100,11 @@ export default function MobileDrawer() {
             style={{
               fontFamily: 'var(--font-display)',
               fontSize: '18px',
+              fontWeight: 400,
               color: 'var(--text)',
             }}
           >
-            ConsiliumAI
+            Consilium<span style={{ color: 'var(--gold)', fontStyle: 'italic' }}>AI</span>
           </span>
           <button
             onClick={() => setIsOpen(false)}

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import NavICP from '@/components/layout/NavICP';
 import Footer from '@/components/layout/Footer';
 import DedicatedPageRelatedPosts from '@/components/blog/DedicatedPageRelatedPosts';
+import AssessmentForm from '@/components/forms/AssessmentForm';
 import { MASTER_THESIS, TAGLINE, PAYER_CHECKLIST_COUNT } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -617,55 +618,16 @@ export default function PayerCCOPage() {
               Complete this form to schedule your complimentary AI governance assessment. We&apos;ll analyze your current posture against payer-specific regulatory requirements and provide a preliminary risk score.
             </p>
 
-            {/* Form Shell - Phase 3 adds interactivity */}
-            <div
-              id="payer-assessment-form"
-              style={{
-                background: 'var(--navy)',
-                border: '1px solid var(--border)',
-                padding: '40px 32px',
-              }}
-            >
-              <div style={{ marginBottom: '24px' }}>
-                <label style={labelStyle}>Your Role</label>
-                <p style={placeholderStyle}>CCO, CMO, CRO, CFO, General Counsel, CIO, VP Compliance</p>
-              </div>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={labelStyle}>Primary Concern</label>
-                <p style={placeholderStyle}>UHC lawsuit, CMS MA, FCA, TRAIGA, Board reporting, D&amp;O, PA audit trail, Bias testing</p>
-              </div>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={labelStyle}>Organization Size</label>
-                <p style={placeholderStyle}>Member count / lives covered</p>
-              </div>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  color: 'var(--muted)',
-                  marginBottom: '24px',
-                }}
-              >
-                The interactive assessment form will load here. Phase 3 hydrates this section with the full intake flow.
-              </p>
-              <Link
-                href="/book"
-                className="btn-gold"
-                style={{
-                  display: 'inline-block',
-                  padding: '16px 32px',
-                  background: 'var(--gold)',
-                  color: 'var(--navy)',
-                  textDecoration: 'none',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Book Assessment Call &rarr;
-              </Link>
-            </div>
+            {/* Assessment Form (D-02: replaced placeholder text) */}
+            <AssessmentForm
+              formId="payer-assessment"
+              leadSource="Payer CCO Page"
+              submitLabel="Request Payer Assessment"
+              roleOptions={['CCO', 'CMO', 'CRO', 'CFO', 'General Counsel', 'CIO', 'VP Compliance', 'Other']}
+              concernOptions={['UHC lawsuit', 'CMS MA', 'FCA', 'TRAIGA', 'Board reporting', 'D&O', 'PA audit trail', 'Bias testing']}
+              showOrgSize={true}
+              orgSizeLabel="Member count / lives covered"
+            />
           </div>
         </section>
 

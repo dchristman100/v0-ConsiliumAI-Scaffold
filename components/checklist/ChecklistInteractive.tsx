@@ -19,12 +19,12 @@ interface ChecklistInteractiveProps {
   totalItems: number;
 }
 
-// Verdict thresholds
+// Verdict thresholds (D-05, D-06)
 function getVerdict(percentage: number): { label: string; color: string } {
-  if (percentage >= 90) return { label: 'Excellent', color: '#22c55e' };
-  if (percentage >= 70) return { label: 'Good Progress', color: '#22c55e' };
-  if (percentage >= 50) return { label: 'In Progress', color: '#eab308' };
-  if (percentage >= 25) return { label: 'Getting Started', color: '#f97316' };
+  if (percentage === 100) return { label: 'Fully Compliant', color: 'var(--green)' };
+  if (percentage >= 76) return { label: 'Nearly Complete', color: 'var(--green)' };
+  if (percentage >= 51) return { label: 'Well Underway', color: 'var(--amber)' };
+  if (percentage >= 26) return { label: 'Making Progress', color: 'var(--amber)' };
   return { label: 'Just Beginning', color: 'var(--muted)' };
 }
 
