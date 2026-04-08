@@ -142,7 +142,7 @@ body: JSON.stringify({
   if (status === 'success') {
     return (
       <div
-        id={formId}
+        id={`assessment-form-${sourcePage}-success`}
         style={{
           padding: '40px 32px',
           background: 'var(--navy2)',
