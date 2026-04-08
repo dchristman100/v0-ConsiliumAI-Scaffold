@@ -19,12 +19,13 @@ interface ChecklistInteractiveProps {
   totalItems: number;
 }
 
-// Verdict thresholds (D-05, D-06)
+// Verdict thresholds (FC-03 per Phase 8 spec)
 function getVerdict(percentage: number): { label: string; color: string } {
   if (percentage === 100) return { label: 'Fully Compliant', color: 'var(--green)' };
   if (percentage >= 76) return { label: 'Nearly Complete', color: 'var(--green)' };
-  if (percentage >= 51) return { label: 'Well Underway', color: 'var(--amber)' };
-  if (percentage >= 26) return { label: 'Making Progress', color: 'var(--amber)' };
+  if (percentage >= 51) return { label: 'Well Underway', color: 'var(--gold)' };
+  if (percentage >= 26) return { label: 'Making Progress', color: 'var(--gold)' };
+  if (percentage >= 1) return { label: 'Getting Started', color: 'var(--muted)' };
   return { label: 'Just Beginning', color: 'var(--muted)' };
 }
 
@@ -182,8 +183,6 @@ export default function ChecklistInteractive({ items, checklistType, totalItems 
                   fontFamily: 'var(--font-body)',
                   fontSize: '15px',
                   color: 'var(--text)',
-                  textDecoration: isChecked ? 'line-through' : 'none',
-                  opacity: isChecked ? 0.7 : 1,
                   lineHeight: 1.5,
                 }}
               >

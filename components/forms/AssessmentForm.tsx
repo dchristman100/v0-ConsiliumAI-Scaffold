@@ -19,13 +19,13 @@ function trackEvent(name: string) {
 }
 
 interface AssessmentFormProps {
-  formId: string;
-  leadSource: string;
+  sourcePage: 'homepage' | 'payer-cco' | 'eu-ai-act' | 'scorecard';
+  sourceCampaign: 'Campaign-1' | 'Campaign-2' | 'Campaign-3';
   submitLabel?: string;
-  roleOptions?: string[];
-  concernOptions?: string[];
+  roleOptions?: readonly string[] | string[];
+  concernOptions?: readonly string[] | string[];
   showJurisdiction?: boolean;
-  jurisdictionOptions?: string[];
+  jurisdictionOptions?: readonly string[] | string[];
   showOrgSize?: boolean;
   orgSizeLabel?: string;
 }
@@ -40,9 +40,9 @@ const DEFAULT_CONCERNS = [
 ];
 
 export default function AssessmentForm({
-  formId,
-  leadSource,
-  submitLabel = 'Start Assessment',
+  sourcePage,
+  sourceCampaign,
+  submitLabel = 'Request Assessment →',
   roleOptions = DEFAULT_ROLES,
   concernOptions = DEFAULT_CONCERNS,
   showJurisdiction = false,
@@ -116,12 +116,12 @@ export default function AssessmentForm({
       const response = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          lead_source: leadSource,
-          form_id: formId,
-          ...utmParams,
-        }),
+body: JSON.stringify({
+  ...formData,
+  source_page: sourcePage,
+  source_campaign: sourceCampaign,
+  ...utmParams,
+  }),
       });
 
       if (!response.ok) {

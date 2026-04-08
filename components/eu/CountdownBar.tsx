@@ -105,41 +105,36 @@ export default function CountdownBar() {
               Book Assessment →
             </Link>
           </>
+        ) : time === null ? (
+          // SSR fallback - static text for search engines (FD-01)
+          <span
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '13px',
+              fontWeight: 700,
+              color: 'var(--gold)',
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+            }}
+          >
+            August 2, 2026 — EU AI Act High-Risk Deadline — €35M Maximum Penalty
+          </span>
         ) : (
-          // Pre-deadline countdown
-          <>
-            {/* Static deadline text - SSR for SEO (FD-01) */}
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '13px',
-                fontWeight: 700,
-                color: 'var(--gold)',
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-              }}
-            >
-              August 2, 2026 — EU AI Act High-Risk Deadline — €35M Maximum Penalty
-            </span>
-
-            {/* Live countdown - hydrates client-side (FD-02, FD-03) */}
-            {time && (
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '16px',
-                }}
-              >
-                <CountdownUnit value={time.days} label="Days" />
-                <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
-                <CountdownUnit value={time.hours} label="Hours" />
-                <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
-                <CountdownUnit value={time.minutes} label="Min" />
-                <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
-                <CountdownUnit value={time.seconds} label="Sec" />
-              </div>
-            )}
-          </>
+          // Live countdown - hydrates client-side (FD-02, FD-03)
+          <div
+            style={{
+              display: 'flex',
+              gap: '16px',
+            }}
+          >
+            <CountdownUnit value={time.days} label="Days" />
+            <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
+            <CountdownUnit value={time.hours} label="Hours" />
+            <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
+            <CountdownUnit value={time.minutes} label="Min" />
+            <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
+            <CountdownUnit value={time.seconds} label="Sec" />
+          </div>
         )}
       </div>
     </div>

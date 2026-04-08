@@ -620,9 +620,9 @@ export default function PayerCCOPage() {
 
             {/* Assessment Form (D-02: replaced placeholder text) */}
             <AssessmentForm
-              formId="payer-assessment"
-              leadSource="Payer CCO Page"
-              submitLabel="Request Payer Assessment"
+              sourcePage="payer-cco"
+              sourceCampaign="Campaign-2"
+              submitLabel="Request Assessment →"
               roleOptions={['CCO', 'CMO', 'CRO', 'CFO', 'General Counsel', 'CIO', 'VP Compliance', 'Other']}
               concernOptions={['UHC lawsuit', 'CMS MA', 'FCA', 'TRAIGA', 'Board reporting', 'D&O', 'PA audit trail', 'Bias testing']}
               showOrgSize={true}
@@ -747,10 +747,10 @@ export default function PayerCCOPage() {
 
         {/* ═══════════════════════════════════════════════════════════════ */}
         {/* RELATED BLOG POSTS (BL-07)                                       */}
-        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* ═════════���═════════════════════════════════════════════════════ */}
         <DedicatedPageRelatedPosts icpSlug="payer-cco" pageType="payer" />
 
-        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* ═══════════════════════════════════════════════��═══════════════ */}
         {/* SECTION 10: CLOSING QUOTE + TAGLINE                             */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section

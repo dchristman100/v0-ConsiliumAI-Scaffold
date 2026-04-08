@@ -736,9 +736,9 @@ export default function EUAIActPage() {
 
             {/* Assessment Form (D-03: replaced placeholder text) */}
             <AssessmentForm
-              formId="eu-assessment"
-              leadSource="EU AI Act Page"
-              submitLabel="Request EU Assessment"
+              sourcePage="eu-ai-act"
+              sourceCampaign="Campaign-3"
+              submitLabel="Request Assessment →"
               roleOptions={['CAIO', 'CDO', 'General Counsel', 'CTO', 'VP Compliance', 'DPO', 'Other']}
               concernOptions={['High-risk classification', 'Annex IV documentation', 'Conformity assessment', 'GPAI obligations', 'Risk management', 'Extraterritorial scope', 'Other']}
               showJurisdiction={true}

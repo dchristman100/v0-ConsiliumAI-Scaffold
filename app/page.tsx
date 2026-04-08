@@ -517,9 +517,9 @@ export default function HomePage() {
 
             {/* Assessment Form (D-01: replaced placeholder text) */}
             <AssessmentForm
-              formId="homepage-assessment"
-              leadSource="Homepage Scorecard Section"
-              submitLabel="Start Assessment"
+              sourcePage="homepage"
+              sourceCampaign="Campaign-1"
+              submitLabel="Start Assessment →"
               roleOptions={['CCO', 'CIO', 'CAIO', 'CDO', 'General Counsel', 'VP Compliance', 'CFO', 'Board Member', 'Other']}
               concernOptions={['Regulatory compliance', 'AI risk documentation', 'Board reporting', 'Litigation readiness', 'Vendor AI governance', 'EU AI Act', 'Bias/fairness testing', 'Other']}
             />
