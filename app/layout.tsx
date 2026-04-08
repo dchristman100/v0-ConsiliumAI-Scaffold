@@ -73,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {/* Skip to main content link for accessibility */}
         <a
           href="#main-content"
