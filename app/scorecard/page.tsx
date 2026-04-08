@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import NavUniversal from '@/components/layout/NavUniversal';
 import Footer from '@/components/layout/Footer';
+import ScorecardFull from '@/components/scorecard/ScorecardFull';
 import { MASTER_THESIS, TAGLINE } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function ScorecardPage() {
       <NavUniversal />
       <main style={{ paddingTop: '67px' }}>
         {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* HERO SECTION                                                    */}
+        {/* HERO SECTION - SSR for SEO                                      */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section style={{ padding: '80px 24px' }}>
           <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
@@ -38,7 +39,7 @@ export default function ScorecardPage() {
                 marginBottom: '24px',
               }}
             >
-              AI Governance Scorecard&trade;
+              AI Governance Scorecard™
             </h1>
             <p
               style={{
@@ -57,7 +58,7 @@ export default function ScorecardPage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* GOVERNANCE DIMENSIONS                                           */}
+        {/* GOVERNANCE DIMENSIONS - SSR for SEO                             */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section
           style={{
@@ -88,27 +89,27 @@ export default function ScorecardPage() {
               }}
             >
               <DimensionCard
-                title="AI Inventory"
-                description="Do you know what AI systems are deployed in your organization?"
+                title="AI Policy Framework"
+                description="Do you have board-approved AI governance policies in place?"
               />
               <DimensionCard
-                title="Documentation"
-                description="Are your AI systems documented with model cards and data lineage?"
+                title="Board Oversight"
+                description="Is there dedicated executive oversight for AI initiatives?"
               />
               <DimensionCard
-                title="Human Oversight"
-                description="Do you have meaningful human review for AI decisions?"
+                title="Documentation & Audit"
+                description="Are AI systems documented with model cards and audit trails?"
               />
               <DimensionCard
                 title="Incident Response"
-                description="Do you have a documented AI incident response plan?"
+                description="Do you have an AI-specific incident response plan?"
               />
             </div>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* REGULATORY EXPOSURE MAP                                         */}
+        {/* REGULATORY EXPOSURE MAP - SSR for SEO                           */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section style={{ padding: '64px 24px' }}>
           <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -134,18 +135,18 @@ export default function ScorecardPage() {
                 justifyContent: 'center',
               }}
             >
-              <RegulationTag label="OCR" fullName="Office for Civil Rights HIPAA AI" />
-              <RegulationTag label="TRAIGA" fullName="AI Accountability Act" />
+              <RegulationTag label="OCR" fullName="Office for Civil Rights" />
+              <RegulationTag label="TRAIGA" fullName="Tennessee Responsible AI in Government Act" />
               <RegulationTag label="EU AI Act" fullName="European Union AI Regulation" />
-              <RegulationTag label="NYDFS" fullName="NY Dept Financial Services 500.17" />
-              <RegulationTag label="CMS MA" fullName="Medicare Advantage Prior Auth" />
+              <RegulationTag label="NYDFS" fullName="NY Department of Financial Services" />
+              <RegulationTag label="CMS MA" fullName="CMS Medicare Advantage" />
               <RegulationTag label="Colorado AI Act" fullName="Colorado AI Consumer Protection" />
             </div>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* SCORECARD FORM SHELL                                            */}
+        {/* INTERACTIVE SCORECARD - Client Component                        */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section
           id="assessment"
@@ -154,101 +155,11 @@ export default function ScorecardPage() {
             padding: '80px 24px',
           }}
         >
-          <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-            <div
-              style={{
-                background: 'var(--navy)',
-                border: '1px solid var(--border)',
-                padding: '48px 40px',
-              }}
-            >
-              <p className="eyebrow" style={{ color: 'var(--gold)', marginBottom: '16px' }}>
-                Question 1 of 5
-              </p>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '24px',
-                  fontWeight: 400,
-                  color: 'var(--text)',
-                  marginBottom: '32px',
-                }}
-              >
-                Do you maintain a complete inventory of AI systems deployed in your organization?
-              </h2>
-
-              {/* Answer Options - SSR placeholder */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '32px' }}>
-                <AnswerOption label="Yes, comprehensive and up-to-date" />
-                <AnswerOption label="Partial inventory exists" />
-                <AnswerOption label="Informal awareness only" />
-                <AnswerOption label="No inventory" />
-              </div>
-
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  color: 'var(--muted)',
-                  marginBottom: '24px',
-                  fontStyle: 'italic',
-                }}
-              >
-                The interactive assessment flow will load here. Phase 3 hydrates this section with the full 5-question flow, progress tracking, and instant scoring.
-              </p>
-
-              {/* Progress indicator */}
-              <div style={{ marginBottom: '24px' }}>
-                <div
-                  style={{
-                    height: '4px',
-                    background: 'var(--navy2)',
-                    marginBottom: '8px',
-                  }}
-                >
-                  <div
-                    style={{
-                      height: '100%',
-                      width: '20%',
-                      background: 'var(--gold)',
-                    }}
-                  />
-                </div>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    color: 'var(--muted)',
-                  }}
-                >
-                  20% complete
-                </p>
-              </div>
-
-              <button
-                className="btn-gold"
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  padding: '16px 32px',
-                  background: 'var(--gold)',
-                  color: 'var(--navy)',
-                  border: 'none',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                }}
-              >
-                Next Question &rarr;
-              </button>
-            </div>
-          </div>
+          <ScorecardFull />
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* WHAT YOU GET                                                    */}
+        {/* WHAT YOU GET - SSR for SEO                                      */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section style={{ padding: '80px 24px' }}>
           <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
@@ -278,7 +189,7 @@ export default function ScorecardPage() {
               />
               <ResultCard
                 title="4-Dimension Gap Analysis"
-                description="Breakdown of your posture across AI Inventory, Documentation, Human Oversight, and Incident Response."
+                description="Breakdown of your posture across AI Policy, Board Oversight, Documentation, and Incident Response."
               />
               <ResultCard
                 title="Regulatory Exposure Map"
@@ -340,7 +251,7 @@ export default function ScorecardPage() {
                   textTransform: 'uppercase',
                 }}
               >
-                Start Assessment &rarr;
+                Start Assessment →
               </Link>
               <Link
                 href="/book"
@@ -405,7 +316,7 @@ export default function ScorecardPage() {
 }
 
 /* ═══════════════════════════════════════════════════════════════ */
-/* COMPONENT HELPERS                                                */
+/* COMPONENT HELPERS - SSR for SEO                                  */
 /* ═══════════════════════════════════════════════════════════════ */
 
 function DimensionCard({ title, description }: { title: string; description: string }) {
@@ -470,45 +381,11 @@ function RegulationTag({ label, fullName }: { label: string; fullName: string })
           fontFamily: 'var(--font-body)',
           fontSize: '10px',
           color: 'var(--muted)',
-          maxWidth: '120px',
+          maxWidth: '140px',
         }}
       >
         {fullName}
       </p>
-    </div>
-  );
-}
-
-function AnswerOption({ label }: { label: string }) {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '16px',
-        padding: '16px 20px',
-        background: 'var(--navy2)',
-        border: '1px solid var(--border)',
-        cursor: 'pointer',
-      }}
-    >
-      <span
-        style={{
-          width: '20px',
-          height: '20px',
-          border: '2px solid var(--border)',
-          flexShrink: 0,
-        }}
-      />
-      <span
-        style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '14px',
-          color: 'var(--text)',
-        }}
-      >
-        {label}
-      </span>
     </div>
   );
 }
