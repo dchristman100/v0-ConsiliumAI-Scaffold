@@ -4,9 +4,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import type { Lead, ScorecardResponse, ChecklistSession, PDFRequest, BlogSubscriber } from '@/types/leads';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
 export type Database = {
   public: {
     Tables: {
@@ -39,14 +36,50 @@ export type Database = {
   };
 };
 
+// Lazy-initialized client singleton (avoids build-time errors when env vars are missing)
+let _supabase: SupabaseClient<Database> | null = null;
+
 // Client-side Supabase client (uses anon key)
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export function getSupabase(): SupabaseClient<Database> {
+  if (_supabase) return _supabase;
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error(
+      'Missing Supabase environment variables. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+    );
+  }
+
+  _supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+  return _supabase;
+}
+
+// Backward compatibility export (deprecated - use getSupabase() instead)
+export const supabase = {
+  get from() {
+    return getSupabase().from.bind(getSupabase());
+  },
+  get auth() {
+    return getSupabase().auth;
+  },
+  get storage() {
+    return getSupabase().storage;
+  },
+};
 
 // Server-side client with service key (for API routes only)
 export function createServiceClient(): SupabaseClient<Database> {
-  const serviceUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const serviceKey = process.env.SUPABASE_SERVICE_KEY!;
-  
+  const serviceUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_KEY;
+
+  if (!serviceUrl || !serviceKey) {
+    throw new Error(
+      'Missing Supabase service environment variables. Please set SUPABASE_URL and SUPABASE_SERVICE_KEY.'
+    );
+  }
+
   return createClient<Database>(serviceUrl, serviceKey);
 }
 
