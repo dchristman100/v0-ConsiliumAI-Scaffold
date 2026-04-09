@@ -201,7 +201,7 @@ export default function MobileDrawer() {
               letterSpacing: '0.05em',
             }}
           >
-            Get Your Free Assessment →
+            Take the Free Assessment →
           </a>
         </nav>
       </div>

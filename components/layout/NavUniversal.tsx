@@ -129,7 +129,7 @@ export default function NavUniversal() {
             textTransform: 'uppercase',
           }}
         >
-          Get Your Free Assessment →
+          Take the Free Assessment →
         </a>
       </div>
 

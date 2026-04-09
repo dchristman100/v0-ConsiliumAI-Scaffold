@@ -130,7 +130,7 @@ export default function NavICP({ variant }: NavICPProps) {
                 textTransform: 'uppercase',
               }}
             >
-              Book Assessment
+              Book a 15-Minute Call
             </Link>
           </div>
         </div>

@@ -268,7 +268,7 @@ export default function ScorecardPage() {
                   border: '1px solid var(--border)',
                 }}
               >
-                Book a Call
+                Book a 15-Minute Call
               </Link>
             </div>
           </div>

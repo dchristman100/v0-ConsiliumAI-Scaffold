@@ -360,7 +360,7 @@ function RolePanelContent({ role, isMobile }: { role: RoleData; isMobile?: boole
             marginBottom: '12px',
           }}
         >
-          Get Your Free Assessment →
+          Take the Free Assessment →
         </Link>
         {role.secondaryLink && (
           <div>

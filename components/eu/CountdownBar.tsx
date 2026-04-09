@@ -89,7 +89,7 @@ export default function CountdownBar() {
           fontSize: '12px',
           letterSpacing: '0.08em',
         }}>
-          Book Assessment →
+          Book a 15-Minute Call →
         </a>
       </div>
     );

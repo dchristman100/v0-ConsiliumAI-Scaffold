@@ -444,7 +444,7 @@ export default function HomePage() {
                     textTransform: 'uppercase',
                   }}
                 >
-                  Get Your Free Assessment →
+                  Take the Free Assessment →
                 </a>
               </div>
 
@@ -670,7 +670,7 @@ export default function HomePage() {
                   textTransform: 'uppercase',
                 }}
               >
-                Get Your Free Assessment →
+                Take the Free Assessment →
               </a>
             </div>
           </div>
@@ -740,7 +740,7 @@ export default function HomePage() {
                   textTransform: 'uppercase',
                 }}
               >
-                Start With the Free Assessment →
+                Take the Free Assessment →
               </a>
             </div>
           </div>
