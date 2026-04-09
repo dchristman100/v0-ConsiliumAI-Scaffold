@@ -172,7 +172,7 @@ export default function PayerChecklistPage() {
                   fontWeight: 600,
                 }}
               >
-                Book Assessment →
+                Book a 15-Minute Call →
               </Link>
             </div>
           </div>

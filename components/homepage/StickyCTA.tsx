@@ -74,7 +74,7 @@ export default function StickyCTA() {
             fontWeight: 600,
           }}
         >
-          Take the Free Assessment →
+          Get Your Free RiskIQ Assessment →
         </Link>
       </div>
 

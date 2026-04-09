@@ -181,7 +181,7 @@ export default function EUChecklistPage() {
                   fontWeight: 600,
                 }}
               >
-                Book Assessment →
+                Book a 15-Minute Call →
               </Link>
             </div>
           </div>

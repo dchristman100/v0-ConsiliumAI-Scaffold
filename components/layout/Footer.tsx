@@ -53,7 +53,7 @@ export default function Footer() {
             <h3 style={columnHeadingStyle}>Company</h3>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <FooterLink href="/">Home</FooterLink>
-              <FooterLink href="/book">Book Assessment</FooterLink>
+              <FooterLink href="/book">Book a 15-Minute Call</FooterLink>
               <FooterLink href="/blog">Insights</FooterLink>
             </nav>
           </div>
@@ -101,7 +101,7 @@ export default function Footer() {
             <h3 style={columnHeadingStyle}>Contact</h3>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <FooterLink href="mailto:info@consiliumai.co">info@consiliumai.co</FooterLink>
-              <FooterLink href="/book">Schedule a Call</FooterLink>
+              <FooterLink href="/book">Book a 15-Minute Call</FooterLink>
             </nav>
           </div>
         </div>
