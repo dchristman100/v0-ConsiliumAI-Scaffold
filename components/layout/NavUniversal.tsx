@@ -129,7 +129,7 @@ export default function NavUniversal() {
             textTransform: 'uppercase',
           }}
         >
-          Take the Free Assessment →
+          Get Your Free RiskIQ Assessment →
         </a>
       </div>
 

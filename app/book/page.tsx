@@ -132,6 +132,26 @@ export default function BookPage() {
                     <strong style={{ color: 'var(--text)' }}>No obligation.</strong> This assessment is complimentary. We&apos;ll provide actionable insights regardless of whether you engage our services.
                   </p>
                 </div>
+
+                <div
+                  style={{
+                    marginTop: '16px',
+                    padding: '16px 20px',
+                    background: 'var(--gold-d)',
+                    border: '1px solid var(--gold)',
+                  }}
+                >
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '13px',
+                      color: 'var(--text)',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    <strong>Already took the RiskIQ Assessment?</strong> Your governance team contact already has your score and exposure map — we&apos;ll pick up right where you left off.
+                  </p>
+                </div>
               </div>
 
               {/* Right: GHL Calendar Embed */}

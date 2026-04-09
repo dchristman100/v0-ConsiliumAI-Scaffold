@@ -201,7 +201,7 @@ export default function MobileDrawer() {
               letterSpacing: '0.05em',
             }}
           >
-            Take the Free Assessment →
+            Get Your Free RiskIQ Assessment →
           </a>
         </nav>
       </div>

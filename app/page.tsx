@@ -6,7 +6,7 @@ import RegulatoryTimeline from '@/components/homepage/RegulatoryTimeline';
 import RoleTabs from '@/components/homepage/RoleTabs';
 import FAQAccordion from '@/components/homepage/FAQAccordion';
 import StickyCTA from '@/components/homepage/StickyCTA';
-import InlineScorecardWidget from '@/components/scorecard/InlineScorecardWidget';
+import ScorecardFunnel from '@/components/scorecard/ScorecardFunnel';
 
 export const metadata: Metadata = {
   title: 'ConsiliumAI — Architects of the AI Governance Layer',
@@ -127,7 +127,7 @@ export default function HomePage() {
                 transition: 'transform 0.15s, box-shadow 0.15s',
               }}
             >
-              Take the Free Assessment →
+              Get Your Free RiskIQ Assessment →
             </a>
           </div>
 
@@ -444,7 +444,7 @@ export default function HomePage() {
                     textTransform: 'uppercase',
                   }}
                 >
-                  Take the Free Assessment →
+                  Get Your Free RiskIQ Assessment →
                 </a>
               </div>
 
@@ -670,7 +670,7 @@ export default function HomePage() {
                   textTransform: 'uppercase',
                 }}
               >
-                Take the Free Assessment →
+                Get Your Free RiskIQ Assessment →
               </a>
             </div>
           </div>
@@ -740,7 +740,7 @@ export default function HomePage() {
                   textTransform: 'uppercase',
                 }}
               >
-                Take the Free Assessment →
+                Get Your Free RiskIQ Assessment →
               </a>
             </div>
           </div>
@@ -798,7 +798,7 @@ export default function HomePage() {
             >
               5 questions. 2 minutes. Instant regulatory exposure map across 6 frameworks.
             </p>
-            <InlineScorecardWidget />
+            <ScorecardFunnel />
           </div>
         </section>
 
@@ -844,58 +844,39 @@ export default function HomePage() {
                 fontSize: '17px',
                 color: 'rgba(255,255,255,0.7)',
                 lineHeight: 1.6,
-                marginBottom: '40px',
                 maxWidth: '560px',
                 margin: '0 auto 40px',
               }}
             >
-              Start with the free assessment. No commitment, no credit card, no sales call required. In 2 minutes, you&apos;ll know exactly where your governance gaps are — and what it takes to close them before enforcement arrives.
+              5 questions. 2 minutes. Get your governance score, regulatory exposure map, and personalized next steps — then book a free 15-minute debrief with our governance team to walk through your results.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', marginBottom: '64px' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                <a
-                  href="#scorecard"
-                  style={{
-                    display: 'inline-block',
-                    padding: '18px 40px',
-                    background: 'white',
-                    color: 'var(--navy)',
-                    textDecoration: 'none',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '17px',
-                    fontWeight: 600,
-                  }}
-                >
-                  Take the Free Assessment →
-                </a>
-                <Link
-                  href="/book"
-                  style={{
-                    display: 'inline-block',
-                    padding: '16px 32px',
-                    background: 'transparent',
-                    color: 'white',
-                    textDecoration: 'none',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '16px',
-                    fontWeight: 600,
-                    border: '1px solid rgba(255,255,255,0.3)',
-                  }}
-                >
-                  Book a 15-Minute Call
-                </Link>
-              </div>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '13px',
-                  color: 'rgba(255,255,255,0.4)',
-                }}
-              >
-                Speak with our governance team — no pitch, just a roadmap.
-              </p>
-            </div>
+            <a
+              href="#scorecard"
+              style={{
+                display: 'inline-block',
+                padding: '18px 40px',
+                background: 'white',
+                color: 'var(--navy)',
+                textDecoration: 'none',
+                fontFamily: 'var(--font-body)',
+                fontSize: '17px',
+                fontWeight: 600,
+                marginBottom: '16px',
+              }}
+            >
+              Get Your Free RiskIQ Assessment →
+            </a>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '13px',
+                color: 'rgba(255,255,255,0.4)',
+                marginBottom: '64px',
+              }}
+            >
+              No commitment. No credit card. Actionable intelligence in 2 minutes.
+            </p>
 
             {/* Final Testimonial */}
             <div

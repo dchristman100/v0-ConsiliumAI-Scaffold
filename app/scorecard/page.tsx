@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import NavUniversal from '@/components/layout/NavUniversal';
 import Footer from '@/components/layout/Footer';
-import ScorecardFull from '@/components/scorecard/ScorecardFull';
+import ScorecardFunnel from '@/components/scorecard/ScorecardFunnel';
 import { MASTER_THESIS, TAGLINE } from '@/lib/constants';
 
 export const metadata: Metadata = {
@@ -155,7 +155,7 @@ export default function ScorecardPage() {
             padding: '80px 24px',
           }}
         >
-          <ScorecardFull />
+          <ScorecardFunnel />
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════ */}
