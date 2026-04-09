@@ -112,7 +112,7 @@ export default function HomePage() {
             </p>
 
             {/* Primary CTA */}
-            <Link
+            <a
               href="#scorecard"
               className="cta-button-primary"
               style={{
@@ -128,7 +128,7 @@ export default function HomePage() {
               }}
             >
               Take the Free Assessment →
-            </Link>
+            </a>
           </div>
 
           {/* Stat Bar */}
@@ -429,7 +429,7 @@ export default function HomePage() {
                   />
                 </div>
 
-                <Link
+                <a
                   href="#scorecard"
                   style={{
                     display: 'inline-block',
@@ -445,7 +445,7 @@ export default function HomePage() {
                   }}
                 >
                   Get Your Free Assessment →
-                </Link>
+                </a>
               </div>
 
               {/* Right Column */}
@@ -655,7 +655,7 @@ export default function HomePage() {
             </div>
 
             <div style={{ textAlign: 'center' }}>
-              <Link
+              <a
                 href="#scorecard"
                 style={{
                   display: 'inline-block',
@@ -671,7 +671,7 @@ export default function HomePage() {
                 }}
               >
                 Get Your Free Assessment →
-              </Link>
+              </a>
             </div>
           </div>
         </section>
@@ -725,7 +725,7 @@ export default function HomePage() {
                 <strong style={{ color: 'var(--gold)' }}>$150,000+ for enterprise-wide governance architecture</strong>.
                 Every engagement begins with the free RiskIQ Assessment.
               </p>
-              <Link
+              <a
                 href="#scorecard"
                 style={{
                   display: 'inline-block',
@@ -741,7 +741,7 @@ export default function HomePage() {
                 }}
               >
                 Start With the Free Assessment →
-              </Link>
+              </a>
             </div>
           </div>
         </section>
@@ -854,7 +854,7 @@ export default function HomePage() {
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', marginBottom: '64px' }}>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                <Link
+                <a
                   href="#scorecard"
                   style={{
                     display: 'inline-block',
@@ -868,7 +868,7 @@ export default function HomePage() {
                   }}
                 >
                   Take the Free Assessment →
-                </Link>
+                </a>
                 <Link
                   href="/book"
                   style={{
