@@ -113,6 +113,7 @@ export default function HomePage() {
             {/* Primary CTA */}
             <Link
               href="/scorecard"
+              className="cta-button-primary"
               style={{
                 display: 'inline-block',
                 padding: '16px 36px',
@@ -123,14 +124,6 @@ export default function HomePage() {
                 fontSize: '16px',
                 fontWeight: 600,
                 transition: 'transform 0.15s, box-shadow 0.15s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-1px)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
               }}
             >
               Get Your Free Assessment →
