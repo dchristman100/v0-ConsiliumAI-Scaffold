@@ -142,8 +142,19 @@ export default async function BlogRegulationPage({ params }: BlogRegulationPageP
                   border: '1px solid var(--border)',
                 }}
               >
-                <p style={{ color: 'var(--muted)', fontSize: '16px', marginBottom: '16px' }}>
-                  No posts found for {formattedName}.
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '24px',
+                    fontWeight: 400,
+                    color: 'var(--text)',
+                    marginBottom: '12px',
+                  }}
+                >
+                  Insights on {formattedName} coming soon.
+                </h3>
+                <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6, marginBottom: '16px' }}>
+                  Expert analysis on this regulation is being prepared.
                 </p>
                 <Link
                   href="/blog"
@@ -153,7 +164,7 @@ export default async function BlogRegulationPage({ params }: BlogRegulationPageP
                     textDecoration: 'none',
                   }}
                 >
-                  View all posts &rarr;
+                  Explore all insights &rarr;
                 </Link>
               </div>
             )}

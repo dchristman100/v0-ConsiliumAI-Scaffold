@@ -14,14 +14,25 @@ export default function PostGrid({ posts, columns = 3 }: PostGridProps) {
     return (
       <div
         style={{
-          padding: '48px',
+          padding: '64px 32px',
           textAlign: 'center',
           background: 'var(--navy2)',
           border: '1px solid var(--border)',
         }}
       >
-        <p style={{ color: 'var(--muted)', fontSize: '14px' }}>
-          No posts found.
+        <h3
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '24px',
+            fontWeight: 400,
+            color: 'var(--text)',
+            marginBottom: '12px',
+          }}
+        >
+          Insights coming soon.
+        </h3>
+        <p style={{ color: 'var(--muted)', fontSize: '14px', lineHeight: 1.6 }}>
+          Expert analysis on AI governance and regulatory compliance is on the way.
         </p>
       </div>
     );
