@@ -115,7 +115,7 @@ export default function NavUniversal() {
           Blog
         </Link>
         <Link
-          href="#scorecard"
+          href="/scorecard"
           className="btn-gold"
           style={{
             display: 'inline-block',
@@ -129,7 +129,7 @@ export default function NavUniversal() {
             textTransform: 'uppercase',
           }}
         >
-          Free RiskIQ Assessment →
+          Get Your Free Assessment →
         </Link>
       </div>
 

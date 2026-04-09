@@ -117,7 +117,13 @@ export default function RegulatoryTimeline() {
                     textAlign: 'center',
                   }}
                 >
-                  {mounted ? (isNow ? 'NOW' : `${days}d`) : '...'}
+                  {mounted
+                    ? isNow
+                      ? 'NOW'
+                      : `${days}d`
+                    : deadline.date
+                      ? new Date(deadline.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                      : 'NOW'}
                 </div>
 
                 {/* Framework Name */}
@@ -149,7 +155,9 @@ export default function RegulatoryTimeline() {
                       : days !== null && days > 0
                         ? `${days} days remaining`
                         : `${Math.abs(days || 0)} days past deadline`
-                    : 'Calculating...'}
+                    : deadline.date
+                      ? `Deadline: ${new Date(deadline.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+                      : 'Active — enforcement underway'}
                 </span>
 
                 {/* Link Arrow */}

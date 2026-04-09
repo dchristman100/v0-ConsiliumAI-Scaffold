@@ -184,7 +184,7 @@ export default function MobileDrawer() {
 
           {/* CTA Button */}
           <Link
-            href="/book"
+            href="/scorecard"
             onClick={() => setIsOpen(false)}
             style={{
               display: 'block',
@@ -201,7 +201,7 @@ export default function MobileDrawer() {
               letterSpacing: '0.05em',
             }}
           >
-            Book Assessment
+            Get Your Free Assessment →
           </Link>
         </nav>
       </div>
