@@ -1244,8 +1244,8 @@ export default function ScorecardFunnel() {
               <div style={{ marginBottom: '24px' }}>
                 {[
                   `We'll review your governance score (${score}/100) and what it means for your organization`,
-                  'We'll walk through your regulatory exposure map — which frameworks apply and where gaps create risk',
-                  'We'll outline the fastest path to audit-ready governance',
+                  `We'll walk through your regulatory exposure map — which frameworks apply and where gaps create risk`,
+                  `We'll outline the fastest path to audit-ready governance`,
                 ].map((item, idx) => (
                   <div
                     key={idx}
