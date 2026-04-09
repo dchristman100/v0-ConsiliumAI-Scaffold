@@ -183,7 +183,7 @@ export default function MobileDrawer() {
           </div>
 
           {/* CTA Button */}
-          <Link
+          <a
             href="/#scorecard"
             onClick={() => setIsOpen(false)}
             style={{
@@ -202,7 +202,7 @@ export default function MobileDrawer() {
             }}
           >
             Get Your Free Assessment →
-          </Link>
+          </a>
         </nav>
       </div>
 
