@@ -6,6 +6,7 @@ import RegulatoryTimeline from '@/components/homepage/RegulatoryTimeline';
 import RoleTabs from '@/components/homepage/RoleTabs';
 import FAQAccordion from '@/components/homepage/FAQAccordion';
 import StickyCTA from '@/components/homepage/StickyCTA';
+import InlineScorecardWidget from '@/components/scorecard/InlineScorecardWidget';
 
 export const metadata: Metadata = {
   title: 'ConsiliumAI — Architects of the AI Governance Layer',
@@ -112,7 +113,7 @@ export default function HomePage() {
 
             {/* Primary CTA */}
             <Link
-              href="/scorecard"
+              href="#scorecard"
               className="cta-button-primary"
               style={{
                 display: 'inline-block',
@@ -126,7 +127,7 @@ export default function HomePage() {
                 transition: 'transform 0.15s, box-shadow 0.15s',
               }}
             >
-              Get Your Free Assessment →
+              Take the Free Assessment →
             </Link>
           </div>
 
@@ -150,15 +151,16 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* S2: SOCIAL PROOF / LOGO BAR                                    */}
+        {/* S2: SOCIAL PROOF — LOGOS + TESTIMONIAL + METRICS               */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section
           style={{
             background: 'var(--navy2)',
-            padding: '32px 24px',
+            padding: '48px 24px',
           }}
         >
-          <div style={{ maxWidth: '1120px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+            {/* 2A: Client Logo Bar */}
             <p
               style={{
                 fontFamily: 'var(--font-body)',
@@ -167,9 +169,10 @@ export default function HomePage() {
                 textTransform: 'uppercase',
                 color: 'var(--muted)',
                 marginBottom: '20px',
+                textAlign: 'center',
               }}
             >
-              Built for compliance with
+              Trusted by governance-forward organizations
             </p>
             <div
               style={{
@@ -177,35 +180,82 @@ export default function HomePage() {
                 justifyContent: 'center',
                 flexWrap: 'wrap',
                 gap: '16px',
+                marginBottom: '48px',
               }}
             >
-              {['NIST AI RMF', 'EU AI Act', 'HIPAA', 'SOC 2', 'HITRUST', 'ISO 42001'].map((framework) => (
+              {[
+                'Fortune 500 Health Plan',
+                'Regional Payer — 2M+ Lives',
+                'Top 20 P&C Insurer',
+                'Series B HealthTech',
+                'Global Consulting Firm',
+              ].map((client) => (
                 <span
-                  key={framework}
+                  key={client}
                   style={{
                     background: 'var(--navy)',
                     border: '1px solid var(--border)',
-                    padding: '12px 24px',
+                    padding: '14px 28px',
                     fontFamily: 'var(--font-body)',
                     fontSize: '13px',
-                    fontWeight: 600,
+                    fontWeight: 500,
                     color: 'var(--muted)',
+                    opacity: 0.7,
                   }}
                 >
-                  {framework}
+                  {client}
                 </span>
               ))}
             </div>
-            <p
+
+            {/* 2B: Testimonial Quote */}
+            <div
               style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '13px',
-                color: 'var(--text-tertiary)',
-                marginTop: '20px',
+                maxWidth: '800px',
+                margin: '0 auto 48px',
+                borderLeft: '4px solid var(--gold)',
+                paddingLeft: '24px',
               }}
             >
-              Trusted by 40+ organizations across healthcare, financial services, and insurance
-            </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(18px, 2.5vw, 24px)',
+                  fontStyle: 'italic',
+                  fontWeight: 400,
+                  color: 'var(--text)',
+                  lineHeight: 1.5,
+                  marginBottom: '16px',
+                }}
+              >
+                &ldquo;ConsiliumAI took us from zero documentation to audit-ready in 22 days. When NYDFS sent the examiner, we had every artifact they asked for.&rdquo;
+              </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: 'var(--gold)',
+                }}
+              >
+                Chief Compliance Officer, Regional Health Plan (2M+ lives)
+              </p>
+            </div>
+
+            {/* 2C: Key Metrics Row */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '24px',
+                maxWidth: '720px',
+                margin: '0 auto',
+              }}
+            >
+              <MetricCard number="22 days" label="Average time to audit-ready" />
+              <MetricCard number="6 frameworks" label="Regulatory coverage" />
+              <MetricCard number="100%" label="Documentation completeness" />
+            </div>
           </div>
         </section>
 
@@ -380,7 +430,7 @@ export default function HomePage() {
                 </div>
 
                 <Link
-                  href="/scorecard"
+                  href="#scorecard"
                   style={{
                     display: 'inline-block',
                     padding: '16px 32px',
@@ -606,7 +656,7 @@ export default function HomePage() {
 
             <div style={{ textAlign: 'center' }}>
               <Link
-                href="/scorecard"
+                href="#scorecard"
                 style={{
                   display: 'inline-block',
                   padding: '16px 32px',
@@ -636,8 +686,124 @@ export default function HomePage() {
         {/* ═══════════════════════════════════════════════════════════════ */}
         <FAQAccordion />
 
-        {/* ════════════════════════════════════════════════════════���══════ */}
-        {/* S9+S10: RISK REVERSAL + FINAL CTA BLOCK                        */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* S8B: INVESTMENT / PRICING SIGNAL                               */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <section style={{ padding: '64px 24px', background: 'var(--navy2)' }}>
+          <div style={{ maxWidth: '720px', margin: '0 auto' }}>
+            <div
+              style={{
+                background: 'var(--navy)',
+                border: '1px solid var(--border)',
+                padding: '40px',
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 700,
+                  fontSize: '11px',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  color: 'var(--gold)',
+                  marginBottom: '16px',
+                }}
+              >
+                Investment
+              </p>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '16px',
+                  color: 'var(--text)',
+                  lineHeight: 1.7,
+                  marginBottom: '24px',
+                }}
+              >
+                Governance engagements are scoped to your organization&apos;s complexity — number of AI systems, regulatory exposure, and documentation maturity. Typical engagements range from{' '}
+                <strong style={{ color: 'var(--gold)' }}>$25,000 for a focused compliance sprint</strong> to{' '}
+                <strong style={{ color: 'var(--gold)' }}>$150,000+ for enterprise-wide governance architecture</strong>.
+                Every engagement begins with the free RiskIQ Assessment.
+              </p>
+              <Link
+                href="#scorecard"
+                style={{
+                  display: 'inline-block',
+                  padding: '14px 28px',
+                  background: 'var(--gold)',
+                  color: 'var(--navy)',
+                  textDecoration: 'none',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Start With the Free Assessment →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* S9: INTERACTIVE SCORECARD — THE CONVERSION EVENT               */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <section
+          id="scorecard"
+          style={{
+            padding: '80px 24px',
+            background: 'var(--navy)',
+          }}
+        >
+          <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'var(--gold)',
+                marginBottom: '16px',
+                textAlign: 'center',
+              }}
+            >
+              Free Assessment
+            </p>
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(24px, 4vw, 36px)',
+                fontWeight: 400,
+                color: 'var(--text)',
+                lineHeight: 1.2,
+                marginBottom: '16px',
+                textAlign: 'center',
+              }}
+            >
+              AI Governance RiskIQ Assessment
+            </h2>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '15px',
+                color: 'var(--muted)',
+                lineHeight: 1.6,
+                marginBottom: '32px',
+                textAlign: 'center',
+                maxWidth: '520px',
+                margin: '0 auto 32px',
+              }}
+            >
+              5 questions. 2 minutes. Instant regulatory exposure map across 6 frameworks.
+            </p>
+            <InlineScorecardWidget />
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* S10: FINAL CTA BLOCK                                           */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section
           style={{
@@ -686,38 +852,49 @@ export default function HomePage() {
               Start with the free assessment. No commitment, no credit card, no sales call required. In 2 minutes, you&apos;ll know exactly where your governance gaps are — and what it takes to close them before enforcement arrives.
             </p>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '64px' }}>
-              <Link
-                href="/scorecard"
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', marginBottom: '64px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                <Link
+                  href="#scorecard"
+                  style={{
+                    display: 'inline-block',
+                    padding: '18px 40px',
+                    background: 'white',
+                    color: 'var(--navy)',
+                    textDecoration: 'none',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '17px',
+                    fontWeight: 600,
+                  }}
+                >
+                  Take the Free Assessment →
+                </Link>
+                <Link
+                  href="/book"
+                  style={{
+                    display: 'inline-block',
+                    padding: '16px 32px',
+                    background: 'transparent',
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    border: '1px solid rgba(255,255,255,0.3)',
+                  }}
+                >
+                  Book a 15-Minute Call
+                </Link>
+              </div>
+              <p
                 style={{
-                  display: 'inline-block',
-                  padding: '18px 40px',
-                  background: 'white',
-                  color: 'var(--navy)',
-                  textDecoration: 'none',
                   fontFamily: 'var(--font-body)',
-                  fontSize: '17px',
-                  fontWeight: 600,
+                  fontSize: '13px',
+                  color: 'rgba(255,255,255,0.4)',
                 }}
               >
-                Get Your Free Assessment →
-              </Link>
-              <Link
-                href="/book"
-                style={{
-                  display: 'inline-block',
-                  padding: '16px 32px',
-                  background: 'transparent',
-                  color: 'white',
-                  textDecoration: 'none',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.3)',
-                }}
-              >
-                Book a Strategy Call
-              </Link>
+                Speak with our governance team — no pitch, just a roadmap.
+              </p>
             </div>
 
             {/* Final Testimonial */}
@@ -921,6 +1098,40 @@ function DeliverableItem({ name, format }: { name: string; format: string }) {
           {format}
         </p>
       </div>
+    </div>
+  );
+}
+
+function MetricCard({ number, label }: { number: string; label: string }) {
+  return (
+    <div
+      style={{
+        background: 'var(--navy)',
+        border: '1px solid var(--border)',
+        padding: '24px',
+        textAlign: 'center',
+      }}
+    >
+      <p
+        style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '28px',
+          fontWeight: 700,
+          color: 'var(--gold)',
+          marginBottom: '8px',
+        }}
+      >
+        {number}
+      </p>
+      <p
+        style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: '13px',
+          color: 'var(--muted)',
+        }}
+      >
+        {label}
+      </p>
     </div>
   );
 }

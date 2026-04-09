@@ -62,7 +62,7 @@ export default function StickyCTA() {
 
         {/* CTA */}
         <Link
-          href="/scorecard"
+          href="#scorecard"
           style={{
             display: 'inline-block',
             padding: '10px 24px',
@@ -74,7 +74,7 @@ export default function StickyCTA() {
             fontWeight: 600,
           }}
         >
-          Get Your Free Assessment →
+          Take the Free Assessment →
         </Link>
       </div>
 
