@@ -18,8 +18,26 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  // Organization JSON-LD schema for SEO (Phase 10)
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'ConsiliumAI',
+    url: 'https://consiliumai.co',
+    description: 'Architects of the AI Governance Layer. Certifiable, insurable, and defendable AI governance by design.',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'info@consiliumai.co',
+      contactType: 'sales',
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
       <NavUniversal />
       <main style={{ paddingTop: '67px' }}>
         {/* ═══════════════════════════════════════════════════════════════ */}

@@ -246,6 +246,8 @@ export default function InlineScorecardWidget() {
       }}
       role="region"
       aria-label="AI Governance Scorecard"
+      aria-live="polite"
+      aria-atomic="false"
     >
       {/* FW-03: Progress Bar */}
       {state.step !== 'cover' && (
