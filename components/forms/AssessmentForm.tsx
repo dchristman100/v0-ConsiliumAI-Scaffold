@@ -202,6 +202,9 @@ body: JSON.stringify({
               if (errors.name) setErrors({ ...errors, name: '' });
             }}
             placeholder="Enter your full name"
+            autoComplete="off"
+            data-lpignore="true"
+            data-form-type="other"
             style={{
               ...inputStyle,
               borderColor: errors.name ? 'var(--red)' : 'var(--border)',
@@ -221,6 +224,9 @@ body: JSON.stringify({
               if (errors.email) setErrors({ ...errors, email: '' });
             }}
             placeholder="you@company.com"
+            autoComplete="off"
+            data-lpignore="true"
+            data-form-type="other"
             style={{
               ...inputStyle,
               borderColor: errors.email ? 'var(--red)' : 'var(--border)',
@@ -240,6 +246,9 @@ body: JSON.stringify({
               if (errors.organization) setErrors({ ...errors, organization: '' });
             }}
             placeholder="Company name"
+            autoComplete="off"
+            data-lpignore="true"
+            data-form-type="other"
             style={{
               ...inputStyle,
               borderColor: errors.organization ? 'var(--red)' : 'var(--border)',
@@ -331,6 +340,9 @@ body: JSON.stringify({
               value={formData.org_size}
               onChange={(e) => setFormData({ ...formData, org_size: e.target.value })}
               placeholder="Optional"
+              autoComplete="off"
+              data-lpignore="true"
+              data-form-type="other"
               style={inputStyle}
             />
           </div>
