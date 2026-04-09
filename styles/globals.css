@@ -130,6 +130,12 @@ textarea:focus-visible,
   }
 }
 
+/* Primary CTA button hover effect */
+.cta-button-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
 /* High contrast mode support */
 @media (forced-colors: active) {
   .btn-gold {
