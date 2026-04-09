@@ -69,14 +69,14 @@ export const supabase = {
   },
 };
 
-// Server-side client with service key (for API routes only)
+// Server-side client with service role key (for API routes only)
 export function createServiceClient(): SupabaseClient<Database> {
   const serviceUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_KEY;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!serviceUrl || !serviceKey) {
     throw new Error(
-      'Missing Supabase service environment variables. Please set SUPABASE_URL and SUPABASE_SERVICE_KEY.'
+      'Missing Supabase service environment variables. Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.'
     );
   }
 
