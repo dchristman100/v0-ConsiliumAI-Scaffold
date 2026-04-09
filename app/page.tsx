@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  console.log('[v0] HomePage rendering');
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -199,7 +200,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* ════════════════════════════════���══════════════════════════════ */}
         {/* S3: REGULATORY TIMELINE WITH LIVE COUNTDOWNS                   */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <RegulatoryTimeline />
