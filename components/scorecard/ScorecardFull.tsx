@@ -236,7 +236,13 @@ export default function ScorecardFull() {
   };
 
   return (
-    <div style={{ maxWidth: '640px', margin: '0 auto' }}>
+    <div
+      style={{ maxWidth: '640px', margin: '0 auto' }}
+      role="region"
+      aria-label="AI Governance Scorecard"
+      aria-live="polite"
+      aria-atomic="false"
+    >
       {/* Progress Bar */}
       {state.step !== 'cover' && (
         <div style={{ height: '4px', background: 'var(--gold-d)', marginBottom: '48px' }}>
