@@ -192,7 +192,7 @@ body: JSON.stringify({
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {/* Full Name */}
-        <div>
+        <div suppressHydrationWarning>
           <label style={labelStyle}>Full Name *</label>
           <input
             type="text"
@@ -211,7 +211,7 @@ body: JSON.stringify({
         </div>
 
         {/* Work Email */}
-        <div>
+        <div suppressHydrationWarning>
           <label style={labelStyle}>Work Email *</label>
           <input
             type="email"
@@ -230,7 +230,7 @@ body: JSON.stringify({
         </div>
 
         {/* Organization */}
-        <div>
+        <div suppressHydrationWarning>
           <label style={labelStyle}>Organization *</label>
           <input
             type="text"
@@ -250,7 +250,7 @@ body: JSON.stringify({
 
         {/* Jurisdiction (optional - for EU page) */}
         {showJurisdiction && jurisdictionOptions.length > 0 && (
-          <div>
+          <div suppressHydrationWarning>
             <label style={labelStyle}>Jurisdiction *</label>
             <select
               value={formData.jurisdiction}
@@ -275,7 +275,7 @@ body: JSON.stringify({
         )}
 
         {/* Role */}
-        <div>
+        <div suppressHydrationWarning>
           <label style={labelStyle}>Role *</label>
           <select
             value={formData.role}
@@ -299,7 +299,7 @@ body: JSON.stringify({
         </div>
 
         {/* Primary Concern */}
-        <div>
+        <div suppressHydrationWarning>
           <label style={labelStyle}>Primary Concern *</label>
           <select
             value={formData.primary_concern}
@@ -324,7 +324,7 @@ body: JSON.stringify({
 
         {/* Organization Size (optional - for Payer page) */}
         {showOrgSize && (
-          <div>
+          <div suppressHydrationWarning>
             <label style={labelStyle}>{orgSizeLabel}</label>
             <input
               type="text"
