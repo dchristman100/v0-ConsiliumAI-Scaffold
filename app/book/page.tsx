@@ -52,7 +52,7 @@ export default function BookPage() {
                 margin: '0 auto 24px',
               }}
             >
-              Schedule a complimentary 30-minute consultation with our AI governance experts. We&apos;ll discuss your specific regulatory challenges and outline a path to audit-ready governance.
+              Schedule a complimentary 15-minute RiskIQ debrief with our AI governance team. We&apos;ll walk through your scorecard results, review your regulatory exposure map, and outline the fastest path to audit-ready.
             </p>
           </div>
         </section>

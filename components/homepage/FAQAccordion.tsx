@@ -5,7 +5,7 @@ import { useState } from 'react';
 const faqs = [
   {
     question: 'How much does this cost?',
-    answer: 'Engagements typically range from $75K to $200K depending on the number of AI systems, regulatory scope, and organizational complexity. The free assessment gives us enough context to provide a specific estimate. No commitment required — the RiskIQ Scorecard is genuinely free.',
+    answer: 'Engagements range from $25,000 for a focused compliance sprint to $150,000+ for enterprise-wide governance architecture, depending on the number of AI systems, regulatory scope, and documentation maturity. The free RiskIQ Assessment gives us enough context to provide a specific estimate within 24 hours of your debrief call. No commitment required — the assessment is genuinely free.',
   },
   {
     question: "Can't we build governance internally?",

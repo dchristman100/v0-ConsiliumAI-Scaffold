@@ -158,7 +158,7 @@ export default function ScorecardPage() {
           <ScorecardFunnel />
         </section>
 
-        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* ══════════════════════════════════════════════════════════���════ */}
         {/* WHAT YOU GET - SSR for SEO                                      */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section style={{ padding: '80px 24px' }}>
@@ -208,19 +208,33 @@ export default function ScorecardPage() {
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section
           style={{
-            background: 'var(--navy2)',
+            background: 'var(--navy)',
             padding: '80px 24px',
             textAlign: 'center',
           }}
         >
           <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontWeight: 700,
+                fontSize: '11px',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                color: 'var(--gold)',
+                marginBottom: '16px',
+              }}
+            >
+              Start here
+            </p>
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(24px, 3vw, 36px)',
+                fontSize: 'clamp(24px, 4vw, 36px)',
                 fontWeight: 400,
                 color: 'var(--text)',
-                marginBottom: '24px',
+                lineHeight: 1.2,
+                marginBottom: '16px',
               }}
             >
               Ready to Assess Your AI Governance?
@@ -230,47 +244,39 @@ export default function ScorecardPage() {
                 fontFamily: 'var(--font-body)',
                 fontSize: '16px',
                 color: 'var(--muted)',
+                lineHeight: 1.6,
                 marginBottom: '32px',
+                maxWidth: '520px',
+                margin: '0 auto 32px',
               }}
             >
-              Start the free 2-minute assessment or book a call to discuss your specific regulatory challenges.
+              5 questions. 2 minutes. Get your governance score and regulatory exposure map — then book a free 15-minute debrief to walk through your results.
             </p>
-            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link
-                href="#assessment"
-                className="btn-gold"
-                style={{
-                  display: 'inline-block',
-                  padding: '16px 32px',
-                  background: 'var(--gold)',
-                  color: 'var(--navy)',
-                  textDecoration: 'none',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                Start Assessment →
-              </Link>
-              <Link
-                href="/book"
-                style={{
-                  display: 'inline-block',
-                  padding: '16px 32px',
-                  background: 'transparent',
-                  color: 'var(--text)',
-                  textDecoration: 'none',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  border: '1px solid var(--border)',
-                }}
-              >
-                Book a 15-Minute Call
-              </Link>
-            </div>
+            <a
+              href="#assessment"
+              style={{
+                display: 'inline-block',
+                padding: '18px 40px',
+                background: 'white',
+                color: 'var(--navy)',
+                textDecoration: 'none',
+                fontFamily: 'var(--font-body)',
+                fontSize: '17px',
+                fontWeight: 600,
+              }}
+            >
+              Get Your Free RiskIQ Assessment →
+            </a>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '13px',
+                color: 'var(--muted)',
+                marginTop: '16px',
+              }}
+            >
+              No commitment. No credit card. Actionable intelligence in 2 minutes.
+            </p>
           </div>
         </section>
 
