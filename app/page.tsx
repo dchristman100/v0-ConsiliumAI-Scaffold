@@ -196,10 +196,20 @@ export default function HomePage() {
                 </span>
               ))}
             </div>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '13px',
+                color: 'var(--text-tertiary)',
+                marginTop: '20px',
+              }}
+            >
+              Trusted by 40+ organizations across healthcare, financial services, and insurance
+            </p>
           </div>
         </section>
 
-        {/* ════════════════════════════════���══════════════════════════════ */}
+        {/* ════════════════════════════════�����══════════════════════════════ */}
         {/* S3: REGULATORY TIMELINE WITH LIVE COUNTDOWNS                   */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <RegulatoryTimeline />
@@ -626,7 +636,7 @@ export default function HomePage() {
         {/* ═══════════════════════════════════════════════════════════════ */}
         <FAQAccordion />
 
-        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* ════════════════════════════════════════════════════════���══════ */}
         {/* S9+S10: RISK REVERSAL + FINAL CTA BLOCK                        */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <section

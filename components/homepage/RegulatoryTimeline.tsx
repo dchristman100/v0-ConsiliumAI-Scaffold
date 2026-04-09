@@ -36,6 +36,13 @@ function getBadgeColor(days: number | null): { bg: string; text: string } {
   }
 }
 
+// Format date string without timezone conversion (SSR-safe)
+function formatDateString(dateStr: string): string {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const [year, month, day] = dateStr.split('-');
+  return `${months[parseInt(month, 10) - 1]} ${parseInt(day, 10)}, ${year}`;
+}
+
 export default function RegulatoryTimeline() {
   const [mounted, setMounted] = useState(false);
 
@@ -117,7 +124,13 @@ export default function RegulatoryTimeline() {
                     textAlign: 'center',
                   }}
                 >
-                  {mounted ? (isNow ? 'NOW' : `${days}d`) : '...'}
+                  {mounted
+                    ? isNow
+                      ? 'NOW'
+                      : `${days}d`
+                    : deadline.date
+                      ? formatDateString(deadline.date)
+                      : 'NOW'}
                 </div>
 
                 {/* Framework Name */}
@@ -149,7 +162,9 @@ export default function RegulatoryTimeline() {
                       : days !== null && days > 0
                         ? `${days} days remaining`
                         : `${Math.abs(days || 0)} days past deadline`
-                    : 'Calculating...'}
+                    : deadline.date
+                      ? `Deadline: ${formatDateString(deadline.date)}`
+                      : 'Active — enforcement underway'}
                 </span>
 
                 {/* Link Arrow */}
