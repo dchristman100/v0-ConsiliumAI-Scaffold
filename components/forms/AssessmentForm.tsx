@@ -50,6 +50,7 @@ export default function AssessmentForm({
   showOrgSize = false,
   orgSizeLabel = 'Organization size',
 }: AssessmentFormProps) {
+  const [mounted, setMounted] = useState(false);
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -62,8 +63,9 @@ export default function AssessmentForm({
     org_size: '',
   });
 
-  // Capture UTM params on mount
+  // Mark as mounted after hydration to prevent browser extension conflicts
   useEffect(() => {
+    setMounted(true);
     captureUTMParams();
   }, []);
 
@@ -180,6 +182,55 @@ body: JSON.stringify({
     );
   }
 
+  // SSR placeholder to avoid hydration mismatch from browser extensions (LastPass, etc.)
+  if (!mounted) {
+    return (
+      <div
+        id={`assessment-form-${sourcePage}`}
+        style={{
+          background: 'var(--navy2)',
+          border: '1px solid var(--border)',
+          padding: '40px 32px',
+          minHeight: '400px',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <label style={labelStyle}>Full Name *</label>
+            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+          </div>
+          <div>
+            <label style={labelStyle}>Work Email *</label>
+            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+          </div>
+          <div>
+            <label style={labelStyle}>Organization *</label>
+            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+          </div>
+          <div>
+            <label style={labelStyle}>Role *</label>
+            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+          </div>
+          <div>
+            <label style={labelStyle}>Primary Concern *</label>
+            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+          </div>
+          <button
+            type="button"
+            disabled
+            style={{
+              ...buttonStyle,
+              opacity: 0.5,
+              cursor: 'not-allowed',
+            }}
+          >
+            {submitLabel}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form
       id={`assessment-form-${sourcePage}`}
@@ -192,7 +243,7 @@ body: JSON.stringify({
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {/* Full Name */}
-        <div suppressHydrationWarning>
+        <div>
           <label style={labelStyle}>Full Name *</label>
           <input
             type="text"
@@ -214,7 +265,7 @@ body: JSON.stringify({
         </div>
 
         {/* Work Email */}
-        <div suppressHydrationWarning>
+        <div>
           <label style={labelStyle}>Work Email *</label>
           <input
             type="email"
@@ -236,7 +287,7 @@ body: JSON.stringify({
         </div>
 
         {/* Organization */}
-        <div suppressHydrationWarning>
+        <div>
           <label style={labelStyle}>Organization *</label>
           <input
             type="text"
@@ -259,7 +310,7 @@ body: JSON.stringify({
 
         {/* Jurisdiction (optional - for EU page) */}
         {showJurisdiction && jurisdictionOptions.length > 0 && (
-          <div suppressHydrationWarning>
+          <div>
             <label style={labelStyle}>Jurisdiction *</label>
             <select
               value={formData.jurisdiction}
@@ -284,7 +335,7 @@ body: JSON.stringify({
         )}
 
         {/* Role */}
-        <div suppressHydrationWarning>
+        <div>
           <label style={labelStyle}>Role *</label>
           <select
             value={formData.role}
@@ -308,7 +359,7 @@ body: JSON.stringify({
         </div>
 
         {/* Primary Concern */}
-        <div suppressHydrationWarning>
+        <div>
           <label style={labelStyle}>Primary Concern *</label>
           <select
             value={formData.primary_concern}
@@ -333,7 +384,7 @@ body: JSON.stringify({
 
         {/* Organization Size (optional - for Payer page) */}
         {showOrgSize && (
-          <div suppressHydrationWarning>
+          <div>
             <label style={labelStyle}>{orgSizeLabel}</label>
             <input
               type="text"
