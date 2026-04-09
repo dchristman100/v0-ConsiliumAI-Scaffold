@@ -184,7 +184,7 @@ export default function MobileDrawer() {
 
           {/* CTA Button */}
           <Link
-            href="/scorecard"
+            href="/#scorecard"
             onClick={() => setIsOpen(false)}
             style={{
               display: 'block',

@@ -115,7 +115,7 @@ export default function NavUniversal() {
           Blog
         </Link>
         <Link
-          href="/scorecard"
+          href="/#scorecard"
           className="btn-gold"
           style={{
             display: 'inline-block',
