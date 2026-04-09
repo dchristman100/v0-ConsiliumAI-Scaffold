@@ -114,7 +114,7 @@ export default function NavUniversal() {
         <Link href="/blog" style={navLinkStyle}>
           Blog
         </Link>
-        <Link
+        <a
           href="/#scorecard"
           className="btn-gold"
           style={{
@@ -130,7 +130,7 @@ export default function NavUniversal() {
           }}
         >
           Get Your Free Assessment →
-        </Link>
+        </a>
       </div>
 
       <style>{`
