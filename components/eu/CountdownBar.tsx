@@ -1,173 +1,238 @@
 'use client';
 
-// components/eu/CountdownBar.tsx
-// EU AI Act countdown clock
-// FD-01 through FD-05: Full implementation per spec
-
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { EU_DEADLINE } from '@/lib/constants';
 
-interface TimeRemaining {
+const EU_DEADLINE = new Date('2026-08-02T00:00:00Z');
+
+interface TimeLeft {
   days: number;
   hours: number;
   minutes: number;
   seconds: number;
-  isPast: boolean;
-}
-
-function calculateTimeRemaining(): TimeRemaining {
-  const now = new Date();
-  const diff = EU_DEADLINE.getTime() - now.getTime();
-  
-  if (diff <= 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0, isPast: true };
-  }
-  
-  return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-    minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-    seconds: Math.floor((diff % (1000 * 60)) / 1000),
-    isPast: false,
-  };
 }
 
 export default function CountdownBar() {
-  // Client-side countdown state - null on SSR
-  const [time, setTime] = useState<TimeRemaining | null>(null);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
+  const [isPastDeadline, setIsPastDeadline] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Initial calculation (FD-02)
-    setTime(calculateTimeRemaining());
-    
-    // Update every second via setInterval (FD-02)
-    const interval = setInterval(() => {
-      setTime(calculateTimeRemaining());
-    }, 1000);
-    
+    setMounted(true);
+
+    function update() {
+      const now = new Date();
+      const diff = EU_DEADLINE.getTime() - now.getTime();
+
+      if (diff <= 0) {
+        setIsPastDeadline(true);
+        return;
+      }
+
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    }
+
+    update(); // Run immediately on mount
+    const interval = setInterval(update, 1000); // Then every second
+
     return () => clearInterval(interval);
   }, []);
 
-  // Post-deadline state (FD-04)
-  const isPast = time?.isPast ?? false;
-
-  return (
-    <div
-      style={{
-        background: 'var(--navy3)',
-        borderBottom: '1px solid var(--border)',
-        padding: '16px 24px',
+  // SSR and pre-hydration: show static fallback text
+  // This is what Google sees — the deadline text is in the server HTML
+  if (!mounted) {
+    return (
+      <div style={{
         position: 'sticky',
-        top: '3px', // Below 3px top bar (FD-05)
-        zIndex: 99,
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '24px',
-          flexWrap: 'wrap',
-        }}
-      >
-        {isPast ? (
-          // Post-deadline display (FD-04)
-          <>
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '14px',
-                fontWeight: 700,
-                color: '#f59e0b', // Amber
-                letterSpacing: '0.02em',
-              }}
-            >
-              EU AI Act enforcement is active
-            </span>
-            <Link
-              href="/book"
-              style={{
-                padding: '8px 16px',
-                background: 'var(--gold)',
-                color: 'var(--navy)',
-                fontFamily: 'var(--font-body)',
-                fontSize: '12px',
-                fontWeight: 600,
-                textDecoration: 'none',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
-              Book Assessment →
-            </Link>
-          </>
-        ) : time === null ? (
-          // SSR fallback - static text for search engines (FD-01)
-          <span
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '13px',
-              fontWeight: 700,
-              color: 'var(--gold)',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-            }}
-          >
-            August 2, 2026 — EU AI Act High-Risk Deadline — €35M Maximum Penalty
-          </span>
-        ) : (
-          // Live countdown - hydrates client-side (FD-02, FD-03)
-          <div
-            style={{
-              display: 'flex',
-              gap: '16px',
-            }}
-          >
-            <CountdownUnit value={time.days} label="Days" />
-            <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
-            <CountdownUnit value={time.hours} label="Hours" />
-            <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
-            <CountdownUnit value={time.minutes} label="Min" />
-            <span style={{ color: 'var(--text)', fontSize: '18px', fontWeight: 700, alignSelf: 'flex-start', marginTop: '2px' }}>:</span>
-            <CountdownUnit value={time.seconds} label="Sec" />
-          </div>
-        )}
+        top: '3px',
+        zIndex: 9998,
+        background: 'var(--navy2)',
+        borderBottom: '1px solid var(--rule)',
+        padding: '12px 24px',
+        textAlign: 'center',
+        fontFamily: 'var(--font-body)',
+        fontSize: '14px',
+        color: 'var(--text)',
+        letterSpacing: '0.04em',
+      }}>
+        <span>August 2, 2026 — EU AI Act High-Risk Deadline — €35M Maximum Penalty</span>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-// FD-03: DM Sans 700, letter-spacing 0.08em, each unit labeled
-function CountdownUnit({ value, label }: { value: number; label: string }) {
-  return (
-    <div style={{ textAlign: 'center', minWidth: '40px' }}>
-      <span
-        style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '20px',
+  // Post-deadline state
+  if (isPastDeadline) {
+    return (
+      <div style={{
+        position: 'sticky',
+        top: '3px',
+        zIndex: 9998,
+        background: 'var(--navy2)',
+        borderBottom: '1px solid var(--rule)',
+        padding: '12px 24px',
+        textAlign: 'center',
+        fontFamily: 'var(--font-body)',
+      }}>
+        <span style={{ color: 'var(--amber)', fontWeight: 700, fontSize: '16px' }}>
+          EU AI Act enforcement is active
+        </span>
+        <span style={{ margin: '0 16px', color: 'var(--dim)' }}>|</span>
+        <a href="/book" style={{
+          color: 'var(--gold)',
+          textDecoration: 'none',
           fontWeight: 700,
-          color: 'var(--text)',
-          display: 'block',
-          letterSpacing: '0.08em',
-        }}
-      >
-        {value.toString().padStart(2, '0')}
-      </span>
-      <span
-        style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: '9px',
-          color: 'var(--muted)',
           textTransform: 'uppercase',
-          letterSpacing: '0.1em',
-        }}
-      >
-        {label}
-      </span>
+          fontSize: '12px',
+          letterSpacing: '0.08em',
+        }}>
+          Book Assessment →
+        </a>
+      </div>
+    );
+  }
+
+  // Live ticking countdown
+  if (!timeLeft) return null;
+
+  const pad = (n: number): string => n.toString().padStart(2, '0');
+
+  return (
+    <div style={{
+      position: 'sticky',
+      top: '3px',
+      zIndex: 9998,
+      background: 'var(--navy2)',
+      borderBottom: '1px solid var(--rule)',
+      padding: '12px 24px',
+      textAlign: 'center',
+      fontFamily: 'var(--font-body)',
+    }}>
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+      }}>
+        <span style={{
+          color: 'var(--amber)',
+          fontWeight: 700,
+          fontSize: '12px',
+          textTransform: 'uppercase',
+          letterSpacing: '0.08em',
+          marginRight: '12px',
+        }}>
+          EU AI Act High-Risk Deadline
+        </span>
+
+        {/* Days */}
+        <div style={{ textAlign: 'center' }}>
+          <span style={{
+            fontFamily: 'var(--font-body)',
+            fontWeight: 700,
+            fontSize: '22px',
+            letterSpacing: '0.08em',
+            color: 'var(--text)',
+          }}>
+            {pad(timeLeft.days)}
+          </span>
+          <div style={{
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.12em',
+            color: 'var(--muted)',
+            marginTop: '2px',
+          }}>
+            Days
+          </div>
+        </div>
+
+        <span style={{ color: 'var(--muted)', fontSize: '20px', fontWeight: 300 }}>:</span>
+
+        {/* Hours */}
+        <div style={{ textAlign: 'center' }}>
+          <span style={{
+            fontFamily: 'var(--font-body)',
+            fontWeight: 700,
+            fontSize: '22px',
+            letterSpacing: '0.08em',
+            color: 'var(--text)',
+          }}>
+            {pad(timeLeft.hours)}
+          </span>
+          <div style={{
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.12em',
+            color: 'var(--muted)',
+            marginTop: '2px',
+          }}>
+            Hrs
+          </div>
+        </div>
+
+        <span style={{ color: 'var(--muted)', fontSize: '20px', fontWeight: 300 }}>:</span>
+
+        {/* Minutes */}
+        <div style={{ textAlign: 'center' }}>
+          <span style={{
+            fontFamily: 'var(--font-body)',
+            fontWeight: 700,
+            fontSize: '22px',
+            letterSpacing: '0.08em',
+            color: 'var(--text)',
+          }}>
+            {pad(timeLeft.minutes)}
+          </span>
+          <div style={{
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.12em',
+            color: 'var(--muted)',
+            marginTop: '2px',
+          }}>
+            Min
+          </div>
+        </div>
+
+        <span style={{ color: 'var(--muted)', fontSize: '20px', fontWeight: 300 }}>:</span>
+
+        {/* Seconds */}
+        <div style={{ textAlign: 'center' }}>
+          <span style={{
+            fontFamily: 'var(--font-body)',
+            fontWeight: 700,
+            fontSize: '22px',
+            letterSpacing: '0.08em',
+            color: 'var(--text)',
+          }}>
+            {pad(timeLeft.seconds)}
+          </span>
+          <div style={{
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.12em',
+            color: 'var(--muted)',
+            marginTop: '2px',
+          }}>
+            Sec
+          </div>
+        </div>
+
+        <span style={{ margin: '0 8px', color: 'var(--dim)' }}>|</span>
+
+        <span style={{
+          color: 'var(--amber)',
+          fontSize: '11px',
+          fontWeight: 700,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+        }}>
+          €35M Maximum Penalty
+        </span>
+      </div>
     </div>
   );
 }
