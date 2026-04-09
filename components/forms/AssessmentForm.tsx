@@ -183,7 +183,27 @@ body: JSON.stringify({
   }
 
   // SSR placeholder to avoid hydration mismatch from browser extensions (LastPass, etc.)
+  // Uses inline styles since style constants are defined after component body
   if (!mounted) {
+    const placeholderLabelStyle: React.CSSProperties = {
+      fontFamily: 'var(--font-body)',
+      fontSize: '11px',
+      fontWeight: 700,
+      letterSpacing: '0.1em',
+      textTransform: 'uppercase',
+      color: 'var(--muted)',
+      marginBottom: '8px',
+      display: 'block',
+    };
+    const placeholderInputStyle: React.CSSProperties = {
+      width: '100%',
+      padding: '14px 16px',
+      fontFamily: 'var(--font-body)',
+      fontSize: '15px',
+      color: 'var(--muted)',
+      background: 'var(--navy)',
+      border: '1px solid var(--border)',
+    };
     return (
       <div
         id={`assessment-form-${sourcePage}`}
@@ -196,32 +216,42 @@ body: JSON.stringify({
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={labelStyle}>Full Name *</label>
-            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+            <label style={placeholderLabelStyle}>Full Name *</label>
+            <div style={placeholderInputStyle}>Loading...</div>
           </div>
           <div>
-            <label style={labelStyle}>Work Email *</label>
-            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+            <label style={placeholderLabelStyle}>Work Email *</label>
+            <div style={placeholderInputStyle}>Loading...</div>
           </div>
           <div>
-            <label style={labelStyle}>Organization *</label>
-            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+            <label style={placeholderLabelStyle}>Organization *</label>
+            <div style={placeholderInputStyle}>Loading...</div>
           </div>
           <div>
-            <label style={labelStyle}>Role *</label>
-            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+            <label style={placeholderLabelStyle}>Role *</label>
+            <div style={placeholderInputStyle}>Loading...</div>
           </div>
           <div>
-            <label style={labelStyle}>Primary Concern *</label>
-            <div style={{ ...inputStyle, color: 'var(--muted)' }}>Loading...</div>
+            <label style={placeholderLabelStyle}>Primary Concern *</label>
+            <div style={placeholderInputStyle}>Loading...</div>
           </div>
           <button
             type="button"
             disabled
             style={{
-              ...buttonStyle,
-              opacity: 0.5,
+              display: 'inline-block',
+              padding: '16px 32px',
+              background: 'var(--gold)',
+              color: 'var(--navy)',
+              fontFamily: 'var(--font-body)',
+              fontSize: '12px',
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              border: 'none',
               cursor: 'not-allowed',
+              opacity: 0.5,
+              width: '100%',
             }}
           >
             {submitLabel}
