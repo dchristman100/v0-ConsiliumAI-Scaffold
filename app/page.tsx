@@ -65,7 +65,7 @@ export default function HomePage() {
                 marginBottom: '24px',
               }}
             >
-              AI Governance for Regulated Industry
+              AI Governance for Regulated Industries
             </p>
 
             {/* H1 */}
